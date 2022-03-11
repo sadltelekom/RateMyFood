@@ -21,3 +21,4 @@ Mathias - the bad and the ugly
 8. New SQL File Database with first Dataset
 9. Website raw design 
 10. Added Base Structure for Java Backend Classes
+11. Implemented all model Classes and started First DB Class as template.
