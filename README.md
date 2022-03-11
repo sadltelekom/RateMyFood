@@ -20,3 +20,4 @@ Mathias - the bad and the ugly
 7. Controller in Java
 8. New SQL File Database with first Dataset
 9. Website raw design 
+10. Added Base Structure for Java Backend Classes
