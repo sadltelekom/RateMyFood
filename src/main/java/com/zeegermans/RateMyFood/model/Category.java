@@ -1,17 +1,20 @@
 package com.zeegermans.RateMyFood.model;
 
+import com.zeegermans.RateMyFood.enums.categoryList;
+import com.zeegermans.RateMyFood.enums.courseList;
+
 public class Category {
     private long id;
-    private String category;
-    private String course;
+    private categoryList category;
+    private courseList course;
 
 
-    public Category(String category, String course) {
+    public Category(categoryList category, courseList course) {
         this.category = category;
         this.course = course;
     }
 
-    public Category(long id, String category, String course) {
+    public Category(long id, categoryList category, courseList course) {
         this.id = id;
         this.category = category;
         this.course = course;
@@ -26,19 +29,19 @@ public class Category {
         this.id = id;
     }
 
-    public String getCategory() {
+    public categoryList getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(categoryList category) {
         this.category = category;
     }
 
-    public String getCourse() {
+    public courseList getCourse() {
         return course;
     }
 
-    public void setCourse(String course) {
+    public void setCourse(courseList course) {
         this.course = course;
     }
 }
