@@ -24,7 +24,6 @@ public class RecipesDB {
                         result.getString("name"),
                         result.getInt("time"),
                         result.getString("howto")
-
                 );
                 filtered.add(recipe);
             }
@@ -47,5 +46,10 @@ public class RecipesDB {
         }
         return null;
     }
+
+    // recipe by category
+    // recipe by user
+    // recipe by ingredients
+    // recipe by rating
 
 }

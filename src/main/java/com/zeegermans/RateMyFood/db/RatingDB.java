@@ -1,6 +1,5 @@
 package com.zeegermans.RateMyFood.db;
 
-import com.zeegermans.RateMyFood.db.DBConnector;
 import com.zeegermans.RateMyFood.model.Rating;
 
 import java.sql.Connection;
@@ -46,5 +45,8 @@ public class RatingDB {
         }
         return null;
     }
+
+    // ratings by recipe
+    // ratings by user
 
 }
