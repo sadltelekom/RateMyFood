@@ -135,7 +135,7 @@ public class UserDB {
                     "FROM recipes " +
                     "INNER JOIN recipes_has_user ON recipes.id=recipes_has_user.recipes_id " +
                     "INNER JOIN user ON recipes_has_user.user_id=user.id " +
-                    "WHERE recipes.id=? ";
+                    "WHERE recipes.id=?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, recipeId);
@@ -153,7 +153,7 @@ public class UserDB {
                 "FROM comments " +
                 "INNER JOIN comments_has_user ON comments.id=comments_has_user.comments_id " +
                 "INNER JOIN user ON comments_has_user.user_id=user.id " +
-                "WHERE comments.id=? ";
+                "WHERE comments.id=?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, commentId);
@@ -197,7 +197,7 @@ public class UserDB {
 
     // UPDATE EXISTING USER
     public List<User> updateUser(User user){
-        String sql = "UPDATE user SET name =?,  realname =?, status =?, email =?, password =? WHERE id =?";
+        String sql = "UPDATE user SET name =?, realname =?, status =?, email =?, password =? WHERE id =?";
         long rowsAffected = 0;
 
         try {
@@ -217,6 +217,23 @@ public class UserDB {
             return getUserById(user.getId());
         } else
             return null;
+    }
+
+    // DELETE USER
+    public boolean deleteUser(long id){
+        String sql = "DELETE FROM user WHERE id= ?";
+        long rowsAffected = 0;
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+
+            rowsAffected = preparedStatement.executeUpdate();
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return rowsAffected == 1;
     }
 
 
