@@ -119,22 +119,50 @@ public class UserDB {
         return null;
     }
 
+    public List<User> getUserByRecipe(int recipeId) {
+        String sql = "SELECT user.* " +
+                    "FROM recipes " +
+                    "INNER JOIN recipes_has_user ON recipes.id=recipes_has_user.recipes_id " +
+                    "INNER JOIN user ON recipes_has_user.user_id=user.id " +
+                    "WHERE recipes.id=? ";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, recipeId);
+            return getUsers(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+    public List<User> getUserByComment(int commentId) {
+        String sql = "SELECT user.* " +
+                "FROM comments " +
+                "INNER JOIN comments_has_user ON comments.id=comments_has_user.comments_id " +
+                "INNER JOIN user ON comments_has_user.user_id=user.id " +
+                "WHERE comments.id=? ";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, commentId);
+            return getUsers(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
 
 
-    // User by recipe
-    // User by comment
+
+
 
     // create user
 
 
 
-//    String sql = "SELECT * FROM movies WHERE title LIKE ?";
-//     try {
-//        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//        preparedStatement.setString(1, "%"+title+"%");
-//        return sendRetrieveMoviesSqlQuery(preparedStatement);
-//    } catch (Exception e){
-//        e.printStackTrace();
-//    }
+
 
 }
