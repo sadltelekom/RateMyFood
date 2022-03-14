@@ -96,49 +96,35 @@ public class CommentsDB {
     // CREATE NEW COMMENT
     public List<Comments> createNewComment(String comment, long recipeId, long userId){
         String sqlStartTransaction ="START TRANSACTION";
-        String sqlComment = "INSERT INTO user VALUES (DEFAULT, ?)";
+        String sqlComment = "INSERT INTO comments VALUES (DEFAULT, ?)";
         String sqlComment2Recipe = "INSERT INTO recipes_has_comments VALUES (?, ?)"; // -- recipe_id, comment_id
         String sqlComment2User = "INSERT INTO comments_has_user VALUES (?, ?)"; // -- comment_id, user_id
         String sqlCommitTransaction = "COMMIT";
         long createdId = -1;
-        long counter = 0;
 
         try {
-//            Statement startTransaction = connection.createStatement();
-//            startTransaction.execute(sqlStartTransaction);
+            Statement startTransaction = connection.createStatement();
+            startTransaction.execute(sqlStartTransaction);
 
-            PreparedStatement newComment = connection.prepareStatement(sqlComment);
+            PreparedStatement newComment = connection.prepareStatement(sqlComment, Statement.RETURN_GENERATED_KEYS);
             newComment.setString(1,comment);
+            newComment.executeUpdate();
 
             ResultSet result = newComment.getGeneratedKeys();
 
             if (result.next()){
                 createdId = result.getLong(1);
-                counter++;
             }
-//            if (createdId <= 0){
-//                return null;
-//            }
 
             PreparedStatement comment2Recipe = connection.prepareStatement(sqlComment2Recipe);
             comment2Recipe.setLong(1,recipeId);
             comment2Recipe.setLong(2,createdId);
-
-            ResultSet resultRecipe = comment2Recipe.getGeneratedKeys();
-
-            if (resultRecipe.next()) {
-                counter++;
-            }
+            comment2Recipe.executeUpdate();
 
             PreparedStatement comment2User = connection.prepareStatement(sqlComment2User);
-            comment2User.setLong(1,userId);
-            comment2User.setLong(2,createdId);
-
-            ResultSet resultUser = comment2Recipe.getGeneratedKeys();
-
-            if (resultUser.next()) {
-                counter++;
-            }
+            comment2User.setLong(1,createdId);
+            comment2User.setLong(2,userId);
+            comment2User.executeUpdate();
 
             Statement commitChanges = connection.createStatement();
             commitChanges.execute(sqlCommitTransaction);
@@ -147,7 +133,7 @@ public class CommentsDB {
             e.printStackTrace();
         }
 
-        if (counter == 3){
+        if (createdId != -1){
             return getCommentById(createdId);
         }
         return null;
