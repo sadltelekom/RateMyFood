@@ -88,19 +88,35 @@ public class IngredientsDB {
     }
 
     public boolean deleteIngredientById(long id) {
-        String sql = "DELETE FROM ingredients WHERE id = ?";
+        String sqlStartTransaction = "START TRANSACTION";
+        String sqlRecipes = "DELETE FROM recipes_has_ingredients WHERE recipes_has_ingredients.ingredients_id = ?";
+        String sqlIngredients = "DELETE FROM ingredients WHERE id = ?";
+        String sqlCommitTransaction = "COMMIT";
         int affectedRows = 0;
-
+        // first start a transaction
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setLong(1, id);
-
-            affectedRows = preparedStatement.executeUpdate();
-        } catch (Exception exception) {
+            Statement startTransaction = connection.createStatement();
+            startTransaction.execute(sqlStartTransaction);
+            PreparedStatement deleteWriters = connection.prepareStatement(sqlRecipes);
+            deleteWriters.setLong(1, id);
+            affectedRows += deleteWriters.executeUpdate();
+            PreparedStatement deleteMovie = connection.prepareStatement(sqlIngredients);
+            deleteMovie.setLong(1, id);
+            affectedRows += deleteMovie.executeUpdate();
+            // Commit the Changes:
+            Statement commitChanges = connection.createStatement();
+            commitChanges.execute(sqlCommitTransaction);
+        } catch (SQLException exception) {
             exception.printStackTrace();
+            try {
+                String sqlRollback = "ROLLBACK";
+                Statement rollbackChanges = connection.createStatement();
+                rollbackChanges.execute(sqlRollback);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-
-        return affectedRows == 1;
+        return affectedRows != 0;
     }
 
     public List<Ingredients> insertIngredients(String name) {
