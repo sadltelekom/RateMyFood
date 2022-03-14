@@ -1,5 +1,8 @@
 package com.zeegermans.RateMyFood.db;
 
+import com.zeegermans.RateMyFood.model.Comments;
+import com.zeegermans.RateMyFood.model.Rating;
+import com.zeegermans.RateMyFood.model.Recipes;
 import com.zeegermans.RateMyFood.model.User;
 
 import java.sql.*;
@@ -220,20 +223,75 @@ public class UserDB {
     }
 
     // DELETE USER
-    public boolean deleteUser(long id){
-        String sql = "DELETE FROM user WHERE id= ?";
-        long rowsAffected = 0;
+//    public boolean deleteUser(long id){
+//        String sql = "DELETE FROM user WHERE id= ?";
+//        long rowsAffected = 0;
+//
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//            preparedStatement.setLong(1, id);
+//
+//            rowsAffected = preparedStatement.executeUpdate();
+//
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        return rowsAffected == 1;
+//    }
+
+    // DELETE USER
+    public boolean deleteUser(long userId){
+        String sqlStartTransaction ="START TRANSACTION";
+        String sqlUser = "DELETE FROM user WHERE id=?";
+//        String sqlRating2Recipe = "DELETE FROM recipes_has_rating WHERE recipes_has_rating.rating_id=?";
+//        String sqlRating2User = "DELETE FROM user_has_rating WHERE user_has_rating.rating_id=?";
+        String sqlCommitTransaction = "COMMIT";
+        int affectedRows = 0;
+
+        CommentsDB comments = new CommentsDB();
+        List<Comments> userComments = comments.getAllCommentsByUser(userId);
+
+        RatingDB ratings = new RatingDB();
+        List<Rating> userRatings = ratings.getAllRatingsByUser(userId);
+
+        RecipesDB recipes = new RecipesDB();
+        List<Recipes> userRecipes = recipes.getRecipesByExactUserId(userId);
+
+
+        // Comments, ratings, recipes durchgehen und per vorhandener methoden löschen
+        // User löschen
+        // Bilder löschen oder nur Verbindung?
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setLong(1, id);
+            Statement startTransaction = connection.createStatement();
+            startTransaction.execute(sqlStartTransaction);
 
-            rowsAffected = preparedStatement.executeUpdate();
+            PreparedStatement deleteRating2Recipe = connection.prepareStatement(sqlRating2Recipe);
+            deleteRating2Recipe.setLong(1,ratingId);
+            affectedRows+= deleteRating2Recipe.executeUpdate();
 
-        } catch (Exception e){
-            e.printStackTrace();
+            PreparedStatement deleteRating2User = connection.prepareStatement(sqlRating2User);
+            deleteRating2User.setLong(1,ratingId);
+            affectedRows+= deleteRating2User.executeUpdate();
+
+            PreparedStatement deleteRating = connection.prepareStatement(sqlRating);
+            deleteRating.setLong(1,ratingId);
+            affectedRows+= deleteRating.executeUpdate();
+
+            Statement commitChanges = connection.createStatement();
+            commitChanges.execute(sqlCommitTransaction);
+
+        } catch (SQLException exception){
+            exception.printStackTrace();
+            try {
+                String sqlRollback = "ROLLBACK";
+                Statement rollbackChanges = connection.createStatement();
+                rollbackChanges.execute(sqlRollback);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return rowsAffected == 1;
+        return affectedRows != 0;
     }
 
 
