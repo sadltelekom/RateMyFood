@@ -283,7 +283,35 @@ public class RecipesDB {
         return affectedRows != 0;
     }
 
+    public List<Recipes> insertRecipes(String name, int time, String howto) {
+        String sql = "INSERT INTO ingredients VALUES (DEFAULT, ?, ? , ?)";
+        long insertedId = -1;
 
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            preparedStatement.setString(1, name);
+            preparedStatement.setInt(2, time);
+            preparedStatement.setString(3, howto);
+
+
+            preparedStatement.executeUpdate();
+
+            ResultSet result = preparedStatement.getGeneratedKeys();
+            if (result.next()) {
+                insertedId = result.getLong(1);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        if (insertedId != -1) {
+            return getRecipesById(insertedId);
+//
+        } else {
+            return null;
+        }
+    }
 
     // recipe by category
     // recipe by user
