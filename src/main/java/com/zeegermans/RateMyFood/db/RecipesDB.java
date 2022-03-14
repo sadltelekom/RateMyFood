@@ -3,10 +3,7 @@ package com.zeegermans.RateMyFood.db;
 import com.zeegermans.RateMyFood.model.Ingredients;
 import com.zeegermans.RateMyFood.model.Recipes;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -191,7 +188,100 @@ public class RecipesDB {
         return null;
     }
 
+    public List<Recipes> getRecipesByExactIngredientsName(String name) {
+        String sql ="SELECT recipes.* FROM ingredients " +
+                "INNER JOIN recipes_has_ingredients ON ingredients.id=recipes_has_ingredients.ingredients_id " +
+                "INNER JOIN recipes ON recipes_has_ingredients.recipes_id=recipes.id WHERE ingredients.name = ? ";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            return getRecipes(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
 
+        }
+        return null;
+    }
+
+    public List<Recipes> getRecipesByPartOfIngredientsName(String name) {
+        String sql = "SELECT recipes.* FROM ingredients " +
+                "INNER JOIN recipes_has_ingredients ON ingredients.id=recipes_has_ingredients.ingredients_id " +
+                "INNER JOIN recipes ON recipes_has_ingredients.recipes_id=recipes.id WHERE ingredients.name LIKE ? ";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, "%" + name + "%");
+
+            return getRecipes(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+    public List<Recipes> getRecipesByExactIngredientsId(long id) {
+        String sql = "SELECT recipes.* FROM ingredients " +
+                "INNER JOIN recipes_has_ingredients ON ingredients.id=recipes_has_ingredients.ingredients_id " +
+                "INNER JOIN recipes ON recipes_has_ingredients.recipes_id=recipes.id WHERE ingredients.id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+            return getRecipes(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+
+
+    public boolean deleteRecipes(long id) {
+        String sqlStartTransaction = "START TRANSACTION";
+        String sqlCategory = "DELETE FROM recipes_has_category WHERE recipes_has_category.recipes_id = ?";
+        String sqlComments = "DELETE FROM recipes_has_comments WHERE recipes_has_comments.recipes_id = ?";
+        String sqlIngredients = "DELETE FROM recipes_has_ingredients WHERE recipes_has_ingredients.recipes_id = ?";
+        String sqlPictures = "DELETE recipes recipes_has_picture WHERE recipes_has_picture.recipes_id = ?";
+        String sqlRecipes = "DELETE FROM recipes WHERE id = ?";
+        String sqlCommitTransaction = "COMMIT";
+        int affectedRows = 0;
+        // first start a transaction
+        try {
+            Statement startTransaction = connection.createStatement();
+            startTransaction.execute(sqlStartTransaction);
+            PreparedStatement deleteActors = connection.prepareStatement(sqlCategory);
+            deleteActors.setLong(1, id);
+            affectedRows += deleteActors.executeUpdate();
+            PreparedStatement deleteDirectors = connection.prepareStatement(sqlComments);
+            deleteDirectors.setLong(1, id);
+            affectedRows += deleteDirectors.executeUpdate();
+            PreparedStatement deleteWriters = connection.prepareStatement(sqlIngredients);
+            deleteWriters.setLong(1, id);
+            affectedRows += deleteWriters.executeUpdate();
+            PreparedStatement deleteCategories = connection.prepareStatement(sqlPictures);
+            deleteCategories.setLong(1, id);
+            affectedRows += deleteCategories.executeUpdate();
+            PreparedStatement deleteMovie = connection.prepareStatement(sqlRecipes);
+            deleteMovie.setLong(1, id);
+            affectedRows += deleteMovie.executeUpdate();
+            // Commit the Changes:
+            Statement commitChanges = connection.createStatement();
+            commitChanges.execute(sqlCommitTransaction);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            try {
+                String sqlRollback = "ROLLBACK";
+                Statement rollbackChanges = connection.createStatement();
+                rollbackChanges.execute(sqlRollback);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return affectedRows != 0;
+    }
 
 
 
