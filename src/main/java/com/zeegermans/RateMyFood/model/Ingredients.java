@@ -1,16 +1,15 @@
 package com.zeegermans.RateMyFood.model;
 
-import com.zeegermans.RateMyFood.enums.ingredientsList;
 
 public class Ingredients {
     private long id;
-    private ingredientsList name;
+    private String name;
 
-    public Ingredients(ingredientsList name) {
+    public Ingredients(String name) {
         this.name = name;
     }
 
-    public Ingredients(long id, ingredientsList name) {
+    public Ingredients(long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -23,11 +22,11 @@ public class Ingredients {
         this.id = id;
     }
 
-    public ingredientsList getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(ingredientsList name) {
+    public void setName(String name) {
         this.name = name;
     }
 }

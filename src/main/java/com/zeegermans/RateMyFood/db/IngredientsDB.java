@@ -1,6 +1,5 @@
 package com.zeegermans.RateMyFood.db;
 
-import com.zeegermans.RateMyFood.enums.ingredientsList;
 import com.zeegermans.RateMyFood.model.Ingredients;
 
 import java.sql.*;
@@ -19,7 +18,7 @@ public class IngredientsDB {
             while(result.next()) {
                 Ingredients ingredients = new Ingredients(
                         result.getLong("id"),
-                        ingredientsList.valueOf(result.getString("name"))
+                        result.getString("name")
                 );
                 filtered.add(ingredients);
             }
