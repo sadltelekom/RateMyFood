@@ -2,10 +2,7 @@ package com.zeegermans.RateMyFood.db;
 
 import com.zeegermans.RateMyFood.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +37,20 @@ public class UserDB {
         String sql = "SELECT * FROM user";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            return getUsers(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+    public List<User> getUserById (Long userId) {
+        String sql = "SELECT * FROM user WHERE id=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, userId);
             return getUsers(preparedStatement);
         }
         catch (SQLException e) {
@@ -155,13 +166,58 @@ public class UserDB {
         return null;
     }
 
+    // CREATE NEW USER
+    public List<User> createNewUser(String name, String realName, String status, String email, String password){
+        String sql = "INSERT INTO user VALUES (DEFAULT, ?, ?, ?, ?, ?)";
+        long createdId = -1;
 
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1,name);
+            preparedStatement.setString(1,realName);
+            preparedStatement.setString(1,status);
+            preparedStatement.setString(1,email);
+            preparedStatement.setString(1,password);
 
+            ResultSet result = preparedStatement.getGeneratedKeys();
 
+            if (result.next()){
+                createdId = result.getLong(1);
+            }
 
-    // create user
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
+        if (createdId != -1){
+            return getUserById(createdId);
+        }
+        return null;
+    }
 
+    // UPDATE EXISTING USER
+    public List<User> updateUser(User user){
+        String sql = "UPDATE user SET name =?,  realname =?, status =?, email =?, password =? WHERE id =?";
+        long rowsAffected = 0;
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getRealName());
+            preparedStatement.setString(3, user.getStatus());
+            preparedStatement.setString(4, user.getEmail());
+            preparedStatement.setString(4, user.getPassword());
+            rowsAffected = preparedStatement.executeUpdate();
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if (rowsAffected == 1){
+            return getUserById(user.getId());
+        } else
+            return null;
+    }
 
 
 
