@@ -61,7 +61,7 @@ public class RatingDB {
         return null;
     }
 
-    public List<Rating> getAllRatingsByRecipe(int recipeId) {
+    public List<Rating> getAllRatingsByRecipe(long recipeId) {
         String sql = "SELECT rating.* " +
                 "FROM recipes " +
                 "INNER JOIN recipes_has_rating ON recipes.id=recipes_has_rating.recipes_id " +
@@ -79,8 +79,50 @@ public class RatingDB {
         return null;
     }
 
-    public Long getAverageRatingByRecipe(int recipeId) {
+    public List<Rating> getAllRatingsByUser(long userId) {
+        String sql = "SELECT rating.* " +
+                "FROM user " +
+                "INNER JOIN user_has_rating ON user.id=user_has_rating.user_id " +
+                "INNER JOIN rating ON user_has_rating.rating_id=rating.id " +
+                "WHERE user.id=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, userId);
+            return getRatings(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+    // TODO: Not Working... no clue .. necessary anyway?
+    public List<Rating> getRatingUserOfRecipe(long userId, long recipeId) {
+        String sql = "";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, userId);
+            return getRatings(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+    public Long getAverageRatingByRecipe(long recipeId) {
         List<Rating> ratings = getAllRatingsByRecipe(recipeId);
+        return calcAverage(ratings);
+    }
+
+    public Long getAverageRatingByUser(long userId) {
+        List<Rating> ratings = getAllRatingsByRecipe(userId);
+        return calcAverage(ratings);
+    }
+
+    public Long calcAverage (List<Rating> ratings) {
         int sum = 0;
         int count = 0;
 
@@ -92,31 +134,22 @@ public class RatingDB {
         return (long) (sum / count);
     }
 
+    // DELETE RATING
+    public boolean deleteRating(long id){
+        String sql = "DELETE FROM rating WHERE id= ?";
+        long rowsAffected = 0;
 
-    public List<Rating> getAllRatingsByUser(int recipeId) {
-        String sql = "SELECT rating.* " +
-                "FROM recipes " +
-                "INNER JOIN recipes_has_rating ON recipes.id=recipes_has_rating.recipes_id " +
-                "INNER JOIN rating ON recipes_has_rating.rating_id=rating.id " +
-                "WHERE recipes.id=?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setLong(1, recipeId);
-            return getRatings(preparedStatement);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
+            preparedStatement.setLong(1, id);
 
+            rowsAffected = preparedStatement.executeUpdate();
+
+        } catch (Exception e){
+            e.printStackTrace();
         }
-        return null;
+        return rowsAffected == 1;
     }
 
-
-
-
-
-    // all ratings by user
-    // average rating given by user
-    // given rating by user of certain recipe
 
 }

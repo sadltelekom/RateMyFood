@@ -219,6 +219,23 @@ public class UserDB {
             return null;
     }
 
+    // DELETE USER
+    public boolean deleteUser(long id){
+        String sql = "DELETE FROM user WHERE id= ?";
+        long rowsAffected = 0;
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+
+            rowsAffected = preparedStatement.executeUpdate();
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return rowsAffected == 1;
+    }
+
 
 
 }
