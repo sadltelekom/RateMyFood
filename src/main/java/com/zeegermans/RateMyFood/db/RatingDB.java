@@ -185,51 +185,72 @@ public class RatingDB {
         return null;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // DELETE RATING
-    public boolean deleteRating(long id){
-        String sql = "DELETE FROM rating WHERE id= ?";
+    public boolean deleteRating(long ratingId){
+        String sqlStartTransaction ="START TRANSACTION";
+        String sqlRating = "DELETE FROM rating WHERE id=?";
+        String sqlRating2Recipe = "DELETE FROM recipes_has_rating WHERE recipes_has_rating.rating_id=?";
+        String sqlRating2User = "DELETE FROM user_has_rating WHERE user_has_rating.rating_id=?";
+        String sqlCommitTransaction = "COMMIT";
+        int affectedRows = 0;
+
+        try {
+            Statement startTransaction = connection.createStatement();
+            startTransaction.execute(sqlStartTransaction);
+
+            PreparedStatement deleteRating2Recipe = connection.prepareStatement(sqlRating2Recipe);
+            deleteRating2Recipe.setLong(1,ratingId);
+            affectedRows+= deleteRating2Recipe.executeUpdate();
+
+            PreparedStatement deleteRating2User = connection.prepareStatement(sqlRating2User);
+            deleteRating2User.setLong(1,ratingId);
+            affectedRows+= deleteRating2User.executeUpdate();
+
+            PreparedStatement deleteRating = connection.prepareStatement(sqlRating);
+            deleteRating.setLong(1,ratingId);
+            affectedRows+= deleteRating.executeUpdate();
+
+            Statement commitChanges = connection.createStatement();
+            commitChanges.execute(sqlCommitTransaction);
+
+        } catch (SQLException exception){
+            exception.printStackTrace();
+            try {
+                String sqlRollback = "ROLLBACK";
+                Statement rollbackChanges = connection.createStatement();
+                rollbackChanges.execute(sqlRollback);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return affectedRows != 0;
+    }
+
+    // UPDATE RATING
+    public List<Rating> updateRating (long ratingId, long newRating) {
+        String sql = "UPDATE rating SET rating=? WHERE id=? ";
         long rowsAffected = 0;
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setLong(1, id);
-
+            preparedStatement.setLong(1, newRating);
+            preparedStatement.setLong(2, ratingId);
             rowsAffected = preparedStatement.executeUpdate();
 
         } catch (Exception e){
             e.printStackTrace();
         }
-        return rowsAffected == 1;
+
+        if (rowsAffected == 1){
+            return getRatingsById(ratingId);
+        } else
+            return null;
+
     }
+
+
+
+
 
 
 }
