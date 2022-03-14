@@ -87,6 +87,7 @@ public class IngredientsDB {
         }
         return null;
     }
+
     public boolean deleteIngredientById(long id) {
         String sql = "DELETE FROM ingredients WHERE id = ?";
         int affectedRows = 0;
