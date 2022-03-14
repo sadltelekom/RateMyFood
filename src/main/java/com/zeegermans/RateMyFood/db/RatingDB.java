@@ -61,7 +61,7 @@ public class RatingDB {
         return null;
     }
 
-    public List<User> getUserByRecipe(int recipeId) {
+    public List<Rating> getAllRatingsByRecipe(int recipeId) {
         String sql = "SELECT rating.* " +
                 "FROM recipes " +
                 "INNER JOIN recipes_has_rating ON recipes.id=recipes_has_rating.recipes_id " +
@@ -70,7 +70,7 @@ public class RatingDB {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, recipeId);
-            return getUsers(preparedStatement);
+            return getRatings(preparedStatement);
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -79,8 +79,42 @@ public class RatingDB {
         return null;
     }
 
-    // all ratings by recipe
-    // average rating by recipe
+    public Long getAverageRatingByRecipe(int recipeId) {
+        List<Rating> ratings = getAllRatingsByRecipe(recipeId);
+        int sum = 0;
+        int count = 0;
+
+        for (Rating rating : ratings) {
+            sum+=rating.getRating();
+            count++;
+        }
+
+        return (long) (sum / count);
+    }
+
+
+    public List<Rating> getAllRatingsByUser(int recipeId) {
+        String sql = "SELECT rating.* " +
+                "FROM recipes " +
+                "INNER JOIN recipes_has_rating ON recipes.id=recipes_has_rating.recipes_id " +
+                "INNER JOIN rating ON recipes_has_rating.rating_id=rating.id " +
+                "WHERE recipes.id=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, recipeId);
+            return getRatings(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+
+
+
+
     // all ratings by user
     // average rating given by user
     // given rating by user of certain recipe
