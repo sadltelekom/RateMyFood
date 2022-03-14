@@ -50,4 +50,14 @@ public class Recipes {
     public void setHowto(String howto) {
         this.howto = howto;
     }
+
+    @Override
+    public String toString() {
+        return "Recipes{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", time=" + time +
+                ", howto='" + howto + '\'' +
+                '}';
+    }
 }
