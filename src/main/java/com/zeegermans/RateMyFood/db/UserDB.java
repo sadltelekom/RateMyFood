@@ -26,7 +26,6 @@ public class UserDB {
                         result.getString("status"),
                         result.getString("email"),
                         result.getString("password")
-
                 );
                 filtered.add(user);
             }
@@ -49,5 +48,12 @@ public class UserDB {
         }
         return null;
     }
+
+    // User by mail
+    // User by name
+    // User by realName
+    // User by recipe
+    // User by comment
+    // User by status
 
 }
