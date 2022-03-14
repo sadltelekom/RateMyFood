@@ -49,11 +49,92 @@ public class UserDB {
         return null;
     }
 
-    // User by mail
-    // User by name
-    // User by realName
+    public List<User> getUserByEmail(String email) {
+        String sql = "SELECT * FROM user WHERE email=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, email);
+            return getUsers(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+    public List<User> getUserByExactName(String name) {
+        String sql = "SELECT * FROM user WHERE name=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            return getUsers(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+    public List<User> getUserByPartOfName(String name) {
+        String sql = "SELECT * FROM user WHERE name LIKE ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, "%" + name + "%");
+            return getUsers(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+    public List<User> getUserByRealName(String realname) {
+        String sql = "SELECT * FROM user WHERE realname=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, realname);
+            return getUsers(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+    public List<User> getUserByStatus(String status) {
+        String sql = "SELECT * FROM user WHERE status=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, status);
+            return getUsers(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+
+
     // User by recipe
     // User by comment
-    // User by status
+
+    // create user
+
+
+
+//    String sql = "SELECT * FROM movies WHERE title LIKE ?";
+//     try {
+//        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//        preparedStatement.setString(1, "%"+title+"%");
+//        return sendRetrieveMoviesSqlQuery(preparedStatement);
+//    } catch (Exception e){
+//        e.printStackTrace();
+//    }
 
 }
