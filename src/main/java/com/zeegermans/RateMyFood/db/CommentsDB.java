@@ -186,4 +186,26 @@ public class CommentsDB {
         }
         return affectedRows != 0;
     }
+
+    // UPDATE COMMENT
+    public List<Comments> updateComment (long commentId, String newComment) {
+        String sql = "UPDATE comments SET comment=? WHERE id=? ";
+        long rowsAffected = 0;
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, newComment);
+            preparedStatement.setLong(2, commentId);
+            rowsAffected = preparedStatement.executeUpdate();
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if (rowsAffected == 1){
+            return getCommentById(commentId);
+        } else
+            return null;
+
+    }
 }
