@@ -34,7 +34,7 @@ public class CategoryDB {
         return filtered;
     }
 
-    public List<Category> getAllRatings() {
+    public List<Category> getAllCategories() {
         String sql = "SELECT * FROM category";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -46,7 +46,5 @@ public class CategoryDB {
         }
         return null;
     }
-
-    // category by ...
 
 }
