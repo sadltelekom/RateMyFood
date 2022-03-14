@@ -1,12 +1,10 @@
 package com.zeegermans.RateMyFood.db;
 
+import com.zeegermans.RateMyFood.model.Comments;
 import com.zeegermans.RateMyFood.model.Rating;
 import com.zeegermans.RateMyFood.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,6 +131,88 @@ public class RatingDB {
 
         return (long) (sum / count);
     }
+
+    // CREATE NEW RATING
+    public List<Rating> createNewRating(long rating, long recipeId, long userId){
+        String sqlStartTransaction ="START TRANSACTION";
+        String sqlRating = "INSERT INTO rating VALUES (DEFAULT, ?)";
+        String sqlRating2Recipe = "INSERT INTO recipes_has_rating VALUES (?, ?)"; // -- recipe_id, rating_id
+        String sqlRating2User = "INSERT INTO user_has_rating VALUES (?, ?)"; // -- user_id, rating_id
+        String sqlCommitTransaction = "COMMIT";
+        long createdId = -1;
+
+        try {
+            Statement startTransaction = connection.createStatement();
+            startTransaction.execute(sqlStartTransaction);
+
+            PreparedStatement newRating = connection.prepareStatement(sqlRating, Statement.RETURN_GENERATED_KEYS);
+            newRating.setLong(1,rating);
+            newRating.executeUpdate();
+
+            ResultSet result = newRating.getGeneratedKeys();
+
+            if (result.next()){
+                createdId = result.getLong(1);
+            }
+
+            PreparedStatement rating2Recipe = connection.prepareStatement(sqlRating2Recipe);
+            rating2Recipe.setLong(1,recipeId);
+            rating2Recipe.setLong(2,createdId);
+            rating2Recipe.executeUpdate();
+
+            PreparedStatement rating2User = connection.prepareStatement(sqlRating2User);
+            rating2User.setLong(1,userId);
+            rating2User.setLong(2,createdId);
+            rating2User.executeUpdate();
+
+            Statement commitChanges = connection.createStatement();
+            commitChanges.execute(sqlCommitTransaction);
+
+        } catch (SQLException exception){
+            exception.printStackTrace();
+            try {
+                String sqlRollback = "ROLLBACK";
+                Statement rollbackChanges = connection.createStatement();
+                rollbackChanges.execute(sqlRollback);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (createdId != -1){
+            return getRatingsById(createdId);
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // DELETE RATING
     public boolean deleteRating(long id){

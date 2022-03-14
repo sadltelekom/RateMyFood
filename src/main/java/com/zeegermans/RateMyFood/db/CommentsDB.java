@@ -129,13 +129,61 @@ public class CommentsDB {
             Statement commitChanges = connection.createStatement();
             commitChanges.execute(sqlCommitTransaction);
 
-        } catch (Exception e){
-            e.printStackTrace();
+        } catch (SQLException exception){
+            exception.printStackTrace();
+            try {
+                String sqlRollback = "ROLLBACK";
+                Statement rollbackChanges = connection.createStatement();
+                rollbackChanges.execute(sqlRollback);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         if (createdId != -1){
             return getCommentById(createdId);
         }
         return null;
+    }
+
+    // DELETE COMMENT
+    public boolean deleteComment(long commentId){
+        String sqlStartTransaction ="START TRANSACTION";
+        String sqlComment = "DELETE FROM comments WHERE id=?";
+        String sqlComment2Recipe = "DELETE FROM recipes_has_comments WHERE recipes_has_comments.comments_id=?";
+        String sqlComment2User = "DELETE FROM comments_has_user WHERE comments_has_user.comments_id=?";
+        String sqlCommitTransaction = "COMMIT";
+        int affectedRows = 0;
+
+        try {
+            Statement startTransaction = connection.createStatement();
+            startTransaction.execute(sqlStartTransaction);
+
+            PreparedStatement deleteComment2Recipe = connection.prepareStatement(sqlComment2Recipe);
+            deleteComment2Recipe.setLong(1,commentId);
+            affectedRows+= deleteComment2Recipe.executeUpdate();
+
+            PreparedStatement deleteComment2User = connection.prepareStatement(sqlComment2User);
+            deleteComment2User.setLong(1,commentId);
+            affectedRows+= deleteComment2User.executeUpdate();
+
+            PreparedStatement deleteComment = connection.prepareStatement(sqlComment);
+            deleteComment.setLong(1,commentId);
+            affectedRows+= deleteComment.executeUpdate();
+
+            Statement commitChanges = connection.createStatement();
+            commitChanges.execute(sqlCommitTransaction);
+
+        } catch (SQLException exception){
+            exception.printStackTrace();
+            try {
+                String sqlRollback = "ROLLBACK";
+                Statement rollbackChanges = connection.createStatement();
+                rollbackChanges.execute(sqlRollback);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return affectedRows != 0;
     }
 }
