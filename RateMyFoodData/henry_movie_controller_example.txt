@@ -1,0 +1,51 @@
+
+@RestController
+public class WebController {
+
+    Connection connection = new MyConnection().getConnection();
+    MovieDB movieDB = new MovieDB(connection);
+
+    public WebController() throws SQLException {
+    }
+
+    //MOVIES
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/allmovies")
+    public List<Movies> movies() {
+        return movieDB.allMoviesWithActors();
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/movies/id/{id}")
+    public List<Movies> movieById(@PathVariable long id) {
+        System.out.println("got not far");
+        return movieDB.getMovieById(id);
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/movies/{name}")
+    public List<Movies> allMovies(@PathVariable String name) {
+        return movieDB.getMovieByName(name);
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/movies/byactor/{name}")
+    public List<MixedSearch> moviesByActor(@PathVariable String name) {
+        return movieDB.getMovieByActor(name);
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/movies/bydirector/{name}")
+    public List<MixedSearch> moviesByDirector(@PathVariable String name) {
+        return movieDB.getMovieByDirector(name);
+    }
+    @CrossOrigin(origins = "*")
+
+    @GetMapping("/movies/byanyone/{name}")
+    public List<MixedSearch> moviesByAnyone(@PathVariable String name) {
+        return movieDB.getMovieByPerson(name);
+    }
+
+
+
