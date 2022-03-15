@@ -292,7 +292,7 @@ public class RecipesDB {
     }
 
     public List<Recipes> insertRecipes(String name, int time, String howto) {
-        String sql = "INSERT INTO ingredients VALUES (DEFAULT, ?, ? , ?)";
+        String sql = "INSERT INTO recipes VALUES (DEFAULT, ?, ? , ?)";
         long insertedId = -1;
 
         try {
@@ -322,7 +322,7 @@ public class RecipesDB {
     }
 
     public List<Recipes> updateRecipesName(Recipes recipes) {
-        String sql = "UPDATE Ingredients SET name = ?,time = ?, howto = ? WHERE id = ?";
+        String sql = "UPDATE recipes SET name = ?,time = ?, howto = ? WHERE id = ?";
         int affectedRows = 0;
 
         try {
