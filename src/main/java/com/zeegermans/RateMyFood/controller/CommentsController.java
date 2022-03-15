@@ -4,13 +4,11 @@ package com.zeegermans.RateMyFood.controller;
 import com.zeegermans.RateMyFood.db.CommentsDB;
 import com.zeegermans.RateMyFood.db.DBConnector;
 import com.zeegermans.RateMyFood.model.Comments;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class CommentsController {
@@ -43,7 +41,28 @@ public class CommentsController {
     }
 
     @CrossOrigin(origins = "*")
-    @
+    @PostMapping("post/comment")
+    public List<Comments> newComment(@RequestBody Map<String, Object> body) {
+        long recipeId = (Integer) body.get("recipeId");
+        long userId = (Integer) body.get("userId");
+        String comment = (String) body.get("comment");
 
+        return comments.createNewComment(comment, recipeId, userId);
+    }
+
+    @CrossOrigin(origins = "*")
+    @PatchMapping("update/comment")
+    public List<Comments> updateComment(@RequestBody Map<String, Object> body) {
+        long commentId = (Integer) body.get("commentId");
+        String newComment = (String) body.get("comment");
+
+        return comments.updateComment(commentId, newComment);
+    }
+
+    @CrossOrigin(origins = "*")
+    @DeleteMapping("delete/comment/{id}")
+    public boolean deleteComment(@PathVariable long id) {
+        return comments.deleteComment(id);
+    }
 
 }
