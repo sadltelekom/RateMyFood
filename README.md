@@ -126,8 +126,45 @@ delete/ratings/{id}|delete a rating
 return: `boolean`
 
 
+</br>
+
+**PICTURE Controller**
+
+API | Data
+--- | ---  
+get/pictures/|get all picture entries
+get/pictures/{id}|get picture entry by ID
+get/pictures/recipe/{id}|get picture entries by recipe ID
+get/pictures/user/{id}|get picture entries by user ID
+return: `List<Picture>`
+
+</br>
+
+API | Data
+--- | --- 
+get/pictures/uploadname/|get name for picture upload
+return: `String`
+
+</br>
+
+API | Data
+--- | --- 
+post/pictures/|create a new picture entry
+return: `List<Picture>` with new picture entry
+```
+{
+    "recipeId": [recipeID],
+    "userId": [userID],
+    "link": "[link to picture file storage]"
+}
+```
+
+</br>
+
+API | Data
+--- | --- 
+delete/pictures/{id}|delete picture entry
+return: `boolean`
 
 
-
-
-
+</br>
