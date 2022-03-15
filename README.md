@@ -24,26 +24,110 @@ Mathias - the bad and the ugly
 11. Implemented all model Classes and started First DB Class as template.
 
 
+</br>
+</br>
+
+**COMMENTS Controller**
+
+API | Data
+--- | ---
+get/comments/|get all comments
+get/comments/{id}|get comment by id
+get/comments/recipe/{id}|get comments by recipeId
+get/comments/user/{id}|get comments by userId
+
+returns: `List<Comments>`
+
+</br>
+
+API | Data
+--- | ---  
+post/comment/|create a new comment  
+return: `List<Comments>` with new comment
+```
+{
+"recipeId": [recipeID],
+"userId": [userID],
+"comment": "[user Input]"
+}
+```
+</br>
+
+API | Data
+--- | ---  
+update/comment/|update a comment
+return: `List<Comments>` with updated comment
+```
+{
+"commentId": [commentID],
+"comment": "[new user Input]"
+}
+```
+</br>
+
+API | Data
+--- | ---  
+delete/comment/{id}|delete a comment
+return: `boolean`
 
 
-COMMENTS Controller
+</br>
 
-get/comments/ 		-- get all comments
-get/comments/{id}	-- get comment by id
-get/comments/recipe/{id} -- getcomments by recipeId
-get/comments/user/{id}	-- get comments by userId
+**RATINGS Controller**
 
-post/comment		-- create a new comment
-	{
-    "recipeId": [recipeID],
-    "userId": [userID],
-    "comment": "[user Input]"
-	}
+API | Data
+--- | ---  
+get/ratings/|get all ratings
+get/ratings/{id}|get rating by id
+get/ratings/recipe/{id}|get ratings by recipe id
+get/ratings/user/{id}|get ratings by user id
+return: `List<Rating>`
 
-update/comment		-- update a comment
-	{
-    "commentId": [commentID],
-    "comment": "[new user Input]"
-	}
+</br>
 
-delete/comment/{id}	-- delete a comment
+API | Data
+--- | ---  
+get/ratings/recipeaverage/{id}|get average of ratings for recipe id
+get/ratings/useraverage/{id}|get average of ratings given by user id
+return: `Long`
+
+</br>
+
+API | Data
+--- | ---  
+post/rating/|create a new rating
+return: `List<Rating>` with new rating
+```
+{
+"recipeId": [recipeID],
+"userId": [userID],
+"rating": [user rating]
+}
+```
+
+</br>
+
+API | Data
+--- | --- 
+update/rating/|update a rating
+return: `List<Rating>` with updated rating
+```
+{
+"ratingId": [recipeID],
+"rating": [new user rating]
+}
+```
+
+</br>
+
+API | Data
+--- | --- 
+delete/ratings/{id}|delete a rating
+return: `boolean`
+
+
+
+
+
+
+
