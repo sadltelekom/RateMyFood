@@ -41,8 +41,6 @@ get/ratings/recipeaverage/{id}	-- get average of ratings for recipe id
 get/ratings/useraverage/{id}	-- get average of ratings given by user id
 				-- return Long
 
-
-
 post/rating/		-- create a new rating
 			-- return List<Rating> with new rating
 {
@@ -62,6 +60,28 @@ delete/ratings/{id}	-- delete a rating
 			-- return boolean
 
 
+PICTURE Controller
+
+get/pictures/			-- get all picture entries
+get/pictures/{id}		-- get picture entry by ID
+get/pictures/recipe/{id}	-- get picture entries by recipe ID
+get/pictures/user/{id}		-- get picture entries by user ID
+				-- return List<Picture>
+
+get/pictures/uploadname/	-- get name for picture upload
+				-- return String
+
+post/pictures/		-- create a new picture entry
+			-- return List<Picture> with new picture entry
+{
+    "recipeId": [recipeID],
+    "userId": [userID],
+    "link": "[link to picture file storage]"
+}
+
+
+delete/pictures/{id}	-- delete picture entry
+			-- return boolean
 
 
 
