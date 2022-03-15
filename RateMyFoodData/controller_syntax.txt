@@ -1,0 +1,69 @@
+
+
+COMMENTS Controller
+
+
+get/comments/ 		-- get all comments
+get/comments/{id}	-- get comment by id
+get/comments/recipe/{id} -- get comments by recipeId
+get/comments/user/{id}	-- get comments by userId
+			-- return List<Comments>
+
+post/comment/		-- create a new comment
+			-- return List<Comments> with new comment
+	{
+    "recipeId": [recipeID],
+    "userId": [userID],
+    "comment": "[user Input]"
+	}
+
+update/comment/		-- update a comment
+			-- return List<Comments> with updated comment
+	{
+    "commentId": [commentID],
+    "comment": "[new user Input]"
+	}
+
+delete/comment/{id}	-- delete a comment
+			-- return boolean
+
+
+
+RATINGS Controller
+
+get/ratings/		-- get all ratings
+get/ratings/{id}	-- get rating by id
+get/ratings/recipe/{id}	-- get ratings by recipe id
+get/ratings/user/{id}	-- get ratings by user id
+			-- return List<Rating>
+
+get/ratings/recipeaverage/{id}	-- get average of ratings for recipe id
+get/ratings/useraverage/{id}	-- get average of ratings given by user id
+				-- return Long
+
+
+
+post/rating/		-- create a new rating
+			-- return List<Rating> with new rating
+{
+    "recipeId": [recipeID],
+    "userId": [userID],
+    "rating": [user rating]
+}
+
+update/rating/		-- update a rating
+			-- return List<Rating> with updated rating
+{
+    "ratingId": [recipeID],
+    "rating": [new user rating]
+}
+
+delete/ratings/{id}	-- delete a rating
+			-- return boolean
+
+
+
+
+
+
+
