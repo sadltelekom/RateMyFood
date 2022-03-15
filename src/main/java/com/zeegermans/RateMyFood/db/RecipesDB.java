@@ -313,6 +313,32 @@ public class RecipesDB {
         }
     }
 
+    public List<Recipes> updateRecipesName(Recipes recipes) {
+        String sql = "UPDATE Ingredients SET name = ?,time = ?, howto = ? WHERE id = ?";
+        int affectedRows = 0;
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, recipes.getName());
+            preparedStatement.setInt(2, recipes.getTime());
+            preparedStatement.setString(3, recipes.getHowto());
+            preparedStatement.setLong(4, recipes.getId());
+
+            affectedRows = preparedStatement.executeUpdate();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        if (affectedRows == 1) {
+            return getRecipesById(recipes.getId());
+            // return city;
+        } else {
+            return null;
+        }
+    }
+
+
     // recipe by category
     // recipe by user
     // recipe by ingredients
