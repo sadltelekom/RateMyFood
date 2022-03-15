@@ -223,59 +223,36 @@ public class UserDB {
     }
 
     // DELETE USER
-//    public boolean deleteUser(long id){
-//        String sql = "DELETE FROM user WHERE id= ?";
-//        long rowsAffected = 0;
-//
-//        try {
-//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//            preparedStatement.setLong(1, id);
-//
-//            rowsAffected = preparedStatement.executeUpdate();
-//
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        return rowsAffected == 1;
-//    }
-
-    // DELETE USER
     public boolean deleteUser(long userId){
         String sqlStartTransaction ="START TRANSACTION";
         String sqlUser = "DELETE FROM user WHERE id=?";
-//        String sqlRating2Recipe = "DELETE FROM recipes_has_rating WHERE recipes_has_rating.rating_id=?";
-//        String sqlRating2User = "DELETE FROM user_has_rating WHERE user_has_rating.rating_id=?";
         String sqlCommitTransaction = "COMMIT";
         int affectedRows = 0;
 
         CommentsDB comments = new CommentsDB();
         List<Comments> userComments = comments.getAllCommentsByUser(userId);
+        for (Comments comment : userComments) {
+            comments.deleteComment(comment.getId());
+        }
 
         RatingDB ratings = new RatingDB();
         List<Rating> userRatings = ratings.getAllRatingsByUser(userId);
+        for (Rating rating : userRatings) {
+            ratings.deleteRating(rating.getId());
+        }
 
         RecipesDB recipes = new RecipesDB();
         List<Recipes> userRecipes = recipes.getRecipesByExactUserId(userId);
-
-
-        // Comments, ratings, recipes durchgehen und per vorhandener methoden löschen
-        // User löschen
-        // Bilder löschen oder nur Verbindung?
+        for (Recipes recipe : userRecipes) {
+            recipes.deleteRecipes(recipe.getId());
+        }
 
         try {
             Statement startTransaction = connection.createStatement();
             startTransaction.execute(sqlStartTransaction);
 
-            PreparedStatement deleteRating2Recipe = connection.prepareStatement(sqlRating2Recipe);
-            deleteRating2Recipe.setLong(1,ratingId);
-            affectedRows+= deleteRating2Recipe.executeUpdate();
-
-            PreparedStatement deleteRating2User = connection.prepareStatement(sqlRating2User);
-            deleteRating2User.setLong(1,ratingId);
-            affectedRows+= deleteRating2User.executeUpdate();
-
-            PreparedStatement deleteRating = connection.prepareStatement(sqlRating);
-            deleteRating.setLong(1,ratingId);
+            PreparedStatement deleteRating = connection.prepareStatement(sqlUser);
+            deleteRating.setLong(1,userId);
             affectedRows+= deleteRating.executeUpdate();
 
             Statement commitChanges = connection.createStatement();
@@ -293,7 +270,5 @@ public class UserDB {
         }
         return affectedRows != 0;
     }
-
-
 
 }
