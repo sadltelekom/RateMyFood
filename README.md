@@ -22,3 +22,28 @@ Mathias - the bad and the ugly
 9. Website raw design 
 10. Added Base Structure for Java Backend Classes
 11. Implemented all model Classes and started First DB Class as template.
+
+
+
+
+COMMENTS Controller
+
+get/comments/ 		-- get all comments
+get/comments/{id}	-- get comment by id
+get/comments/recipe/{id} -- getcomments by recipeId
+get/comments/user/{id}	-- get comments by userId
+
+post/comment		-- create a new comment
+	{
+    "recipeId": [recipeID],
+    "userId": [userID],
+    "comment": "[user Input]"
+	}
+
+update/comment		-- update a comment
+	{
+    "commentId": [commentID],
+    "comment": "[new user Input]"
+	}
+
+delete/comment/{id}	-- delete a comment
