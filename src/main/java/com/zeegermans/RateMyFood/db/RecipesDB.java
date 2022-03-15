@@ -244,7 +244,8 @@ public class RecipesDB {
         String sqlCategory = "DELETE FROM recipes_has_category WHERE recipes_has_category.recipes_id = ?";
         String sqlComments = "DELETE FROM recipes_has_comments WHERE recipes_has_comments.recipes_id = ?";
         String sqlIngredients = "DELETE FROM recipes_has_ingredients WHERE recipes_has_ingredients.recipes_id = ?";
-        String sqlPictures = "DELETE recipes recipes_has_picture WHERE recipes_has_picture.recipes_id = ?";
+        String sqlPictures = "DELETE FROM recipes_has_picture WHERE recipes_has_picture.recipes_id = ?";
+        String sqlRatings = "DELETE FROM recipes_has_rating WHERE recipes_has_rating.recipes_id = ?";
         String sqlRecipes = "DELETE FROM recipes WHERE id = ?";
         String sqlCommitTransaction = "COMMIT";
         int affectedRows = 0;
@@ -264,6 +265,9 @@ public class RecipesDB {
             PreparedStatement deletePictures = connection.prepareStatement(sqlPictures);
             deletePictures.setLong(1, id);
             affectedRows += deletePictures.executeUpdate();
+            PreparedStatement deleteRating = connection.prepareStatement(sqlRatings);
+            deleteRating.setLong(1, id);
+            affectedRows += deleteRating.executeUpdate();
             PreparedStatement deleteRecipes = connection.prepareStatement(sqlRecipes);
             deleteRecipes.setLong(1, id);
             affectedRows += deleteRecipes.executeUpdate();
