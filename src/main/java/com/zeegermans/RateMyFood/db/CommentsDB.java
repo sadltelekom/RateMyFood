@@ -57,7 +57,7 @@ public class CommentsDB {
         return null;
     }
 
-    public List<Comments> getAllCommentsByRecipe(long commentId) {
+    public List<Comments> getAllCommentsByRecipe(long recipeId) {
         String sql = "SELECT comments.* " +
                 "FROM recipes " +
                 "INNER JOIN recipes_has_comments ON recipes.id=recipes_has_comments.recipes_id " +
@@ -65,7 +65,7 @@ public class CommentsDB {
                 "WHERE recipes.id=?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setLong(1, commentId);
+            preparedStatement.setLong(1, recipeId);
             return getComments(preparedStatement);
         }
         catch (SQLException e) {
