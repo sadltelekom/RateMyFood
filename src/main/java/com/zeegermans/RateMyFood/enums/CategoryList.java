@@ -1,6 +1,6 @@
 package com.zeegermans.RateMyFood.enums;
 
-public enum categoryList {
+public enum CategoryList {
     PASTA,
     PIZZA,
     SOUP,
@@ -8,5 +8,6 @@ public enum categoryList {
     VEGETARIAN,
     VEGAN,
     MEATLOVER,
-    SALAD
+    SALAD;
+
 }

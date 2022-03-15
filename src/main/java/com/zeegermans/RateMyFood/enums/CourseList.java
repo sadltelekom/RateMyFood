@@ -1,6 +1,6 @@
 package com.zeegermans.RateMyFood.enums;
 
-public enum courseList {
+public enum CourseList {
     MAIN,
     STARTER,
     DESSERT,

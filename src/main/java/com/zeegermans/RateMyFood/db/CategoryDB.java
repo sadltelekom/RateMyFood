@@ -1,7 +1,7 @@
 package com.zeegermans.RateMyFood.db;
 
-import com.zeegermans.RateMyFood.enums.categoryList;
-import com.zeegermans.RateMyFood.enums.courseList;
+import com.zeegermans.RateMyFood.enums.CategoryList;
+import com.zeegermans.RateMyFood.enums.CourseList;
 import com.zeegermans.RateMyFood.model.Category;
 
 import java.sql.Connection;
@@ -23,8 +23,8 @@ public class CategoryDB {
             while(result.next()) {
                 Category category = new Category(
                         result.getLong("id"),
-                        categoryList.valueOf(result.getString("category")),
-                        courseList.valueOf(result.getString("course"))                );
+                        CategoryList.valueOf(result.getString("category")),
+                        CourseList.valueOf(result.getString("course"))                );
                 filtered.add(category);
             }
 
@@ -34,17 +34,20 @@ public class CategoryDB {
         return filtered;
     }
 
-    public List<Category> getAllCategories() {
-        String sql = "SELECT * FROM category";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            return getCategory(preparedStatement);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
+    public Object getAllCategories() {
+        return CategoryList.values();
+//        String sql = "SELECT * FROM category";
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//            return getCategory(preparedStatement);
+//        }
+//        catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+    }
 
-        }
-        return null;
+    public Object getAllCourses() {
+        return CourseList.values();
     }
 
 }
