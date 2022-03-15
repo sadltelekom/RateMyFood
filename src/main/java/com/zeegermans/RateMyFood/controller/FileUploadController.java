@@ -1,5 +1,6 @@
 package com.zeegermans.RateMyFood.controller;
 
+import com.zeegermans.RateMyFood.storage.FileStorage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +16,8 @@ public class FileUploadController {
                                    RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
-        System.out.println("Got an file do not know what to do with it.");
+        FileStorage fileStorage = new FileStorage();
+        fileStorage.saveFile(file,file.getOriginalFilename());
         return "";
     }
 
