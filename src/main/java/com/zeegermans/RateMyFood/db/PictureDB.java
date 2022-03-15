@@ -169,6 +169,47 @@ public class PictureDB {
         return null;
     }
 
+    // DELETE PICTURE LINK
+    public boolean deletePicture(long pictureId){
+        String sqlStartTransaction ="START TRANSACTION";
+        String sqlPicture = "DELETE FROM picture WHERE id=?";
+        String sqlPicture2Recipe = "DELETE FROM recipes_has_picture WHERE recipes_has_picture.picture_id=?";
+        String sqlPicture2User = "DELETE FROM picture_has_user WHERE picture_has_user.picture_id=?";
+        String sqlCommitTransaction = "COMMIT";
+        int affectedRows = 0;
+
+        try {
+            Statement startTransaction = connection.createStatement();
+            startTransaction.execute(sqlStartTransaction);
+
+            PreparedStatement deletePicture2Recipe = connection.prepareStatement(sqlPicture2Recipe);
+            deletePicture2Recipe.setLong(1,pictureId);
+            affectedRows+= deletePicture2Recipe.executeUpdate();
+
+            PreparedStatement deletePicture2User = connection.prepareStatement(sqlPicture2User);
+            deletePicture2User.setLong(1,pictureId);
+            affectedRows+= deletePicture2User.executeUpdate();
+
+            PreparedStatement deletePicture = connection.prepareStatement(sqlPicture);
+            deletePicture.setLong(1,pictureId);
+            affectedRows+= deletePicture.executeUpdate();
+
+            Statement commitChanges = connection.createStatement();
+            commitChanges.execute(sqlCommitTransaction);
+
+        } catch (SQLException exception){
+            exception.printStackTrace();
+            try {
+                String sqlRollback = "ROLLBACK";
+                Statement rollbackChanges = connection.createStatement();
+                rollbackChanges.execute(sqlRollback);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return affectedRows != 0;
+    }
+
 
 
 
