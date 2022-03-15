@@ -49,7 +49,7 @@ public class UserController {
         List<User> users = userDB.getUserById(id);
 
         if (users.isEmpty()) {
-            return "No participant found with ID " + id;
+            return "No User found with ID " + id;
         } else {
             return users;
         }
