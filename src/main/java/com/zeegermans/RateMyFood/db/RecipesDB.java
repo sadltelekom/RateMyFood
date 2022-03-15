@@ -292,7 +292,7 @@ public class RecipesDB {
     }
 
     public List<Recipes> insertRecipes(String name, int time, String howto) {
-        String sql = "INSERT INTO ingredients VALUES (DEFAULT, ?, ? , ?)";
+        String sql = "INSERT INTO recipes VALUES (DEFAULT, ?, ? , ?)";
         long insertedId = -1;
 
         try {
@@ -321,17 +321,17 @@ public class RecipesDB {
         }
     }
 
-    public List<Recipes> updateRecipesName(Recipes recipes) {
-        String sql = "UPDATE Ingredients SET name = ?,time = ?, howto = ? WHERE id = ?";
+    public List<Recipes> updateRecipes(long id, String name, int time, String howto) {
+        String sql = "UPDATE recipes SET name = ?,time = ?, howto = ? WHERE id = ?";
         int affectedRows = 0;
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setString(1, recipes.getName());
-            preparedStatement.setInt(2, recipes.getTime());
-            preparedStatement.setString(3, recipes.getHowto());
-            preparedStatement.setLong(4, recipes.getId());
+            preparedStatement.setString(1, name);
+            preparedStatement.setInt(2, time);
+            preparedStatement.setString(3, howto);
+            preparedStatement.setLong(4, id);
 
             affectedRows = preparedStatement.executeUpdate();
         } catch (Exception exception) {
@@ -339,7 +339,7 @@ public class RecipesDB {
         }
 
         if (affectedRows == 1) {
-            return getRecipesById(recipes.getId());
+            return getRecipesById(id);
             // return city;
         } else {
             return null;

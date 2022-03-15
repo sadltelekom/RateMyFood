@@ -133,7 +133,7 @@ public class UserDB {
         return null;
     }
 
-    public List<User> getUserByRecipe(long recipeId) {
+    public List<User> getUserByRecipeId(long recipeId) {
         String sql = "SELECT user.* " +
                     "FROM recipes " +
                     "INNER JOIN recipes_has_user ON recipes.id=recipes_has_user.recipes_id " +
@@ -142,6 +142,24 @@ public class UserDB {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, recipeId);
+            return getUsers(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+    public List<User> getUserByRecipeName(String recipename) {
+        String sql = "SELECT user.* " +
+                "FROM recipes " +
+                "INNER JOIN recipes_has_user ON recipes.id=recipes_has_user.recipes_id " +
+                "INNER JOIN user ON recipes_has_user.user_id=user.id " +
+                "WHERE recipes.name LIKE ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, recipename);
             return getUsers(preparedStatement);
         }
         catch (SQLException e) {
@@ -199,17 +217,18 @@ public class UserDB {
     }
 
     // UPDATE EXISTING USER
-    public List<User> updateUser(User user){
+    public List<User> updateUser(long id,String name, String realName, String status, String email, String password){
         String sql = "UPDATE user SET name =?, realname =?, status =?, email =?, password =? WHERE id =?";
         long rowsAffected = 0;
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getRealName());
-            preparedStatement.setString(3, user.getStatus());
-            preparedStatement.setString(4, user.getEmail());
-            preparedStatement.setString(4, user.getPassword());
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, realName);
+            preparedStatement.setString(3, status);
+            preparedStatement.setString(4, email);
+            preparedStatement.setString(5, password);
+            preparedStatement.setLong(6, id);
             rowsAffected = preparedStatement.executeUpdate();
 
         } catch (Exception e){
@@ -217,7 +236,7 @@ public class UserDB {
         }
 
         if (rowsAffected == 1){
-            return getUserById(user.getId());
+            return getUserById(id);
         } else
             return null;
     }
