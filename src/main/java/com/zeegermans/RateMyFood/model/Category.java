@@ -44,4 +44,13 @@ public class Category {
     public void setCourse(courseList course) {
         this.course = course;
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", category=" + category +
+                ", course=" + course +
+                '}';
+    }
 }
