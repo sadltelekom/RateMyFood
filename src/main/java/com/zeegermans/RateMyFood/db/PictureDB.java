@@ -1,10 +1,8 @@
 package com.zeegermans.RateMyFood.db;
 
-import com.zeegermans.RateMyFood.model.Comments;
 import com.zeegermans.RateMyFood.model.Picture;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -209,10 +207,5 @@ public class PictureDB {
         }
         return affectedRows != 0;
     }
-
-
-
-
-    // delete picture
 
 }
