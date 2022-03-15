@@ -41,7 +41,7 @@ public class CommentsController {
     }
 
     @CrossOrigin(origins = "*")
-    @PostMapping("post/comment")
+    @PostMapping("post/comment/")
     public List<Comments> newComment(@RequestBody Map<String, Object> body) {
         long recipeId = (Integer) body.get("recipeId");
         long userId = (Integer) body.get("userId");
@@ -51,7 +51,7 @@ public class CommentsController {
     }
 
     @CrossOrigin(origins = "*")
-    @PatchMapping("update/comment")
+    @PatchMapping("update/comment/")
     public List<Comments> updateComment(@RequestBody Map<String, Object> body) {
         long commentId = (Integer) body.get("commentId");
         String newComment = (String) body.get("comment");
