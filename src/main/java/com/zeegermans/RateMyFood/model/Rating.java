@@ -28,4 +28,12 @@ public class Rating {
     public void setRating(int rating) {
         this.rating = rating;
     }
+
+    @Override
+    public String toString() {
+        return "Rating{" +
+                "id=" + id +
+                ", rating=" + rating +
+                '}';
+    }
 }

@@ -1,5 +1,8 @@
 package com.zeegermans.RateMyFood.db;
 
+import com.zeegermans.RateMyFood.model.Comments;
+import com.zeegermans.RateMyFood.model.Rating;
+import com.zeegermans.RateMyFood.model.Recipes;
 import com.zeegermans.RateMyFood.model.User;
 
 import java.sql.*;
@@ -220,22 +223,52 @@ public class UserDB {
     }
 
     // DELETE USER
-    public boolean deleteUser(long id){
-        String sql = "DELETE FROM user WHERE id= ?";
-        long rowsAffected = 0;
+    public boolean deleteUser(long userId){
+        String sqlStartTransaction ="START TRANSACTION";
+        String sqlUser = "DELETE FROM user WHERE id=?";
+        String sqlCommitTransaction = "COMMIT";
+        int affectedRows = 0;
+
+        CommentsDB comments = new CommentsDB();
+        List<Comments> userComments = comments.getAllCommentsByUser(userId);
+        for (Comments comment : userComments) {
+            comments.deleteComment(comment.getId());
+        }
+
+        RatingDB ratings = new RatingDB();
+        List<Rating> userRatings = ratings.getAllRatingsByUser(userId);
+        for (Rating rating : userRatings) {
+            ratings.deleteRating(rating.getId());
+        }
+
+        RecipesDB recipes = new RecipesDB();
+        List<Recipes> userRecipes = recipes.getRecipesByExactUserId(userId);
+        for (Recipes recipe : userRecipes) {
+            recipes.deleteRecipes(recipe.getId());
+        }
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setLong(1, id);
+            Statement startTransaction = connection.createStatement();
+            startTransaction.execute(sqlStartTransaction);
 
-            rowsAffected = preparedStatement.executeUpdate();
+            PreparedStatement deleteRating = connection.prepareStatement(sqlUser);
+            deleteRating.setLong(1,userId);
+            affectedRows+= deleteRating.executeUpdate();
 
-        } catch (Exception e){
-            e.printStackTrace();
+            Statement commitChanges = connection.createStatement();
+            commitChanges.execute(sqlCommitTransaction);
+
+        } catch (SQLException exception){
+            exception.printStackTrace();
+            try {
+                String sqlRollback = "ROLLBACK";
+                Statement rollbackChanges = connection.createStatement();
+                rollbackChanges.execute(sqlRollback);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return rowsAffected == 1;
+        return affectedRows != 0;
     }
-
-
 
 }

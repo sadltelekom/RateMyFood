@@ -29,4 +29,12 @@ public class Ingredients {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Ingredients{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

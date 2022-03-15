@@ -28,4 +28,12 @@ public class Comments {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    @Override
+    public String toString() {
+        return "Comments{" +
+                "id=" + id +
+                ", comment='" + comment + '\'' +
+                '}';
+    }
 }
