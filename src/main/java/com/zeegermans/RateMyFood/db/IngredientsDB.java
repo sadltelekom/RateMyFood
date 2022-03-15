@@ -97,12 +97,12 @@ public class IngredientsDB {
         try {
             Statement startTransaction = connection.createStatement();
             startTransaction.execute(sqlStartTransaction);
-            PreparedStatement deleteWriters = connection.prepareStatement(sqlRecipes);
-            deleteWriters.setLong(1, id);
-            affectedRows += deleteWriters.executeUpdate();
-            PreparedStatement deleteMovie = connection.prepareStatement(sqlIngredients);
-            deleteMovie.setLong(1, id);
-            affectedRows += deleteMovie.executeUpdate();
+            PreparedStatement deleteRecipes = connection.prepareStatement(sqlRecipes);
+            deleteRecipes.setLong(1, id);
+            affectedRows += deleteRecipes.executeUpdate();
+            PreparedStatement deleteIngredients = connection.prepareStatement(sqlIngredients);
+            deleteIngredients.setLong(1, id);
+            affectedRows += deleteIngredients.executeUpdate();
             // Commit the Changes:
             Statement commitChanges = connection.createStatement();
             commitChanges.execute(sqlCommitTransaction);

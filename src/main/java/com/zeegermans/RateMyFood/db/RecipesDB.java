@@ -252,21 +252,21 @@ public class RecipesDB {
         try {
             Statement startTransaction = connection.createStatement();
             startTransaction.execute(sqlStartTransaction);
-            PreparedStatement deleteActors = connection.prepareStatement(sqlCategory);
-            deleteActors.setLong(1, id);
-            affectedRows += deleteActors.executeUpdate();
-            PreparedStatement deleteDirectors = connection.prepareStatement(sqlComments);
-            deleteDirectors.setLong(1, id);
-            affectedRows += deleteDirectors.executeUpdate();
-            PreparedStatement deleteWriters = connection.prepareStatement(sqlIngredients);
-            deleteWriters.setLong(1, id);
-            affectedRows += deleteWriters.executeUpdate();
-            PreparedStatement deleteCategories = connection.prepareStatement(sqlPictures);
-            deleteCategories.setLong(1, id);
-            affectedRows += deleteCategories.executeUpdate();
-            PreparedStatement deleteMovie = connection.prepareStatement(sqlRecipes);
-            deleteMovie.setLong(1, id);
-            affectedRows += deleteMovie.executeUpdate();
+            PreparedStatement deleteCategory = connection.prepareStatement(sqlCategory);
+            deleteCategory.setLong(1, id);
+            affectedRows += deleteCategory.executeUpdate();
+            PreparedStatement deleteComments = connection.prepareStatement(sqlComments);
+            deleteComments.setLong(1, id);
+            affectedRows += deleteComments.executeUpdate();
+            PreparedStatement deleteIngredients = connection.prepareStatement(sqlIngredients);
+            deleteIngredients.setLong(1, id);
+            affectedRows += deleteIngredients.executeUpdate();
+            PreparedStatement deletePictures = connection.prepareStatement(sqlPictures);
+            deletePictures.setLong(1, id);
+            affectedRows += deletePictures.executeUpdate();
+            PreparedStatement deleteRecipes = connection.prepareStatement(sqlRecipes);
+            deleteRecipes.setLong(1, id);
+            affectedRows += deleteRecipes.executeUpdate();
             // Commit the Changes:
             Statement commitChanges = connection.createStatement();
             commitChanges.execute(sqlCommitTransaction);
