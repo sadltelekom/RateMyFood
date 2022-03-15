@@ -17,20 +17,65 @@ import java.util.Map;
 @RestController
 public class UserController {
     Connection connection = DBConnector.getInstance().getConnection();
-
+    UserDB userDB = new UserDB();
 
     @CrossOrigin(origins = "*")
     @GetMapping("/user/all/")
     public List<User> users() {
-        return UserDB.getAllUsers();
+        return userDB.getAllUsers();
     }
 
     @CrossOrigin(origins = "*")
     @GetMapping("/user/id/{id}")
     public List<User> userById(@PathVariable long id) {
         System.out.println("got not far");
-        return UserDB.getUserById(id);
+        return userDB.getUserById(id);
     }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/user/commitid/{id}")
+    public List<User> userByComment(@PathVariable long id) {
+        System.out.println("got not far");
+        return userDB.getUserByComment(id);
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/user/email/{email}")
+    public List<User> userByEmail(@PathVariable String email) {
+        System.out.println("got not far");
+        return userDB.getUserByEmail(email);
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/user/name/{name}")
+    public List<User> userByName(@PathVariable String name) {
+        System.out.println("got not far");
+        return userDB.getUserByExactName(name);
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/user/realname/{realname}")
+    public List<User> userByRealName(@PathVariable String realname) {
+        System.out.println("got not far");
+        return userDB.getUserByRealName(realname);
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/user/status/{status}")
+    public List<User> userByStatus(@PathVariable String status) {
+        System.out.println("got not far");
+        return userDB.getUserByStatus(status);
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/user/partofname/{partofname}")
+    public List<User> userBypartofname(@PathVariable String partofname) {
+        System.out.println("got not far");
+        return userDB.getUserByPartOfName(partofname);
+    }
+
+
+
 
 
 

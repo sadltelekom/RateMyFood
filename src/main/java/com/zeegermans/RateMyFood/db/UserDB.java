@@ -49,7 +49,7 @@ public class UserDB {
         return null;
     }
 
-    public List<User> getUserById (Long userId) {
+    public List<User> getUserById (long userId) {
         String sql = "SELECT * FROM user WHERE id=?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -133,7 +133,7 @@ public class UserDB {
         return null;
     }
 
-    public List<User> getUserByRecipe(int recipeId) {
+    public List<User> getUserByRecipe(long recipeId) {
         String sql = "SELECT user.* " +
                     "FROM recipes " +
                     "INNER JOIN recipes_has_user ON recipes.id=recipes_has_user.recipes_id " +
@@ -151,7 +151,7 @@ public class UserDB {
         return null;
     }
 
-    public List<User> getUserByComment(int commentId) {
+    public List<User> getUserByComment(long commentId) {
         String sql = "SELECT user.* " +
                 "FROM comments " +
                 "INNER JOIN comments_has_user ON comments.id=comments_has_user.comments_id " +
