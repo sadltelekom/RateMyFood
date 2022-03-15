@@ -1,0 +1,110 @@
+package com.example.MovieREST;
+
+import org.springframework.web.bind.annotation.*;
+
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+public class ParticipantController {
+
+    private Connection connection = new MovieConnector().getConnection();
+
+    @GetMapping("/participants")
+    public Map<String, Object> participants(@RequestParam(defaultValue = "") String first_name) {
+
+        ParticipantDB participantDB = new ParticipantDB(connection);
+        List<Participant> participants = new ArrayList<>();
+        if (first_name.isEmpty()) {
+            participants = participantDB.getAllParticipant();
+        } else {
+            participants = participantDB.getParticipantMatchingName(first_name);
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("count: ", participants.size());
+        result.put("results: ", participants);
+        List<String> participantsFound = new ArrayList<>();
+        for (Participant participant : participants) {
+            participantsFound.add("/participants/" + participant.getId());
+        }
+
+        result.put("results: ", participantsFound);
+        return result;
+    }
+
+    @GetMapping("/participants/{id}")
+    public Object participants(@PathVariable long id) {
+
+        ParticipantDB participantDB = new ParticipantDB(connection);
+        Participant participant = participantDB.getParticipantById(id);
+
+        if (participant == null) {
+            return "No participant found with ID " + id;
+        } else {
+            return participant;
+        }
+    }
+
+    @GetMapping("/participants/searchBy")
+    public Object movieByCategory(@RequestParam(defaultValue = "") String name) {
+        Connection connection = new MovieConnector().getConnection();
+        ParticipantDB participantDB = new ParticipantDB(connection);
+        List<Participant> participants = new ArrayList<>();
+
+        if (!name.isEmpty()) {
+            participants = participantDB.getParticipantMatchingName(name);
+        }
+
+        if (participants == null) {
+            return "No participant with name like " + name;
+        } else {
+            return participants;
+        }
+    }
+
+    @DeleteMapping("/deleteParticipant/{id}")
+    public String deleteParticipant(@PathVariable long id) {
+        Connection connection = new MovieConnector().getConnection();
+        ParticipantDB participantDB = new ParticipantDB(connection);
+        boolean result = participantDB.deleteParticipant(id);
+        if (result) {
+            return "Participant with id " + id + " deleted successfully";
+        } else {
+            return "Nothing deleted";
+        }
+    }
+
+    @PostMapping("/participants")
+    public Object createParticipants(@RequestBody Map<String, Object> body) {
+        ParticipantDB participantDB = new ParticipantDB(connection);
+        String first_name = (String) body.get("first_name");
+        String last_name = (String) body.get("last_name");
+        Participant insertedParticipant = participantDB.insertParticipant(first_name,last_name);
+        if (insertedParticipant == null) {
+            return "No Participant was inserted";
+        }
+        else {
+            return insertedParticipant;
+        }
+    }
+
+    @PutMapping("/participants/{id}")
+    public Object updateParticipant(@PathVariable long id, @RequestBody Participant participant) {
+        ParticipantDB participantDB = new ParticipantDB(connection);
+        System.out.println(participant);
+        Participant updatedParticipant = participantDB.updateParticipant(participant);
+        if (updatedParticipant == null) {
+            return "No Participant was updated";
+        }
+        else {
+            return updatedParticipant;
+        }
+
+    }
+
+
+}
