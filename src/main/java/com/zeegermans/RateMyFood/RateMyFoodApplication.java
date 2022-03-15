@@ -14,7 +14,7 @@ public class RateMyFoodApplication {
 		Connection connection = DBConnector.getInstance().getConnection();
 
 		PictureDB comment = new PictureDB();
-		System.out.println(comment.getAllPicturesByUser(1));
+		System.out.println(comment.createNewPictureName());
 
 		SpringApplication.run(RateMyFoodApplication.class, args);
 	}
