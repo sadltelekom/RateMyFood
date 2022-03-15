@@ -46,12 +46,12 @@ public class UserController {
     public Object user(@PathVariable long id) {
 
         UserDB userDB = new UserDB();
-        List<User> user = userDB.getUserById(id);
+        List<User> users = userDB.getUserById(id);
 
-        if (user.isEmpty()) {
+        if (users.isEmpty()) {
             return "No participant found with ID " + id;
         } else {
-            return user;
+            return users;
         }
     }
 }
