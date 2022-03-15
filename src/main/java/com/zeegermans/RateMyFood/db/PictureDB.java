@@ -117,11 +117,11 @@ public class PictureDB {
     }
 
     // CREATE NEW PICTURE LINK
-    public List<Picture> createNewComment(String comment, long recipeId, long userId){
+    public List<Picture> createNewPicture(String link, long recipeId, long userId){
         String sqlStartTransaction ="START TRANSACTION";
-        String sqlComment = "INSERT INTO comments VALUES (DEFAULT, ?)";
-        String sqlComment2Recipe = "INSERT INTO recipes_has_comments VALUES (?, ?)"; // -- recipe_id, comment_id
-        String sqlComment2User = "INSERT INTO comments_has_user VALUES (?, ?)"; // -- comment_id, user_id
+        String sqlPicture = "INSERT INTO picture VALUES (DEFAULT, ?)";
+        String sqlPicture2Recipe = "INSERT INTO recipes_has_picture VALUES (?, ?)"; // -- recipe_id, picture_id
+        String sqlPicture2User = "INSERT INTO picture_has_user VALUES (?, ?)"; // -- picture_id, user_id
         String sqlCommitTransaction = "COMMIT";
         long createdId = -1;
 
@@ -129,25 +129,25 @@ public class PictureDB {
             Statement startTransaction = connection.createStatement();
             startTransaction.execute(sqlStartTransaction);
 
-            PreparedStatement newComment = connection.prepareStatement(sqlComment, Statement.RETURN_GENERATED_KEYS);
-            newComment.setString(1,comment);
-            newComment.executeUpdate();
+            PreparedStatement newPicture = connection.prepareStatement(sqlPicture, Statement.RETURN_GENERATED_KEYS);
+            newPicture.setString(1,link);
+            newPicture.executeUpdate();
 
-            ResultSet result = newComment.getGeneratedKeys();
+            ResultSet result = newPicture.getGeneratedKeys();
 
             if (result.next()){
                 createdId = result.getLong(1);
             }
 
-            PreparedStatement comment2Recipe = connection.prepareStatement(sqlComment2Recipe);
-            comment2Recipe.setLong(1,recipeId);
-            comment2Recipe.setLong(2,createdId);
-            comment2Recipe.executeUpdate();
+            PreparedStatement picture2Recipe = connection.prepareStatement(sqlPicture2Recipe);
+            picture2Recipe.setLong(1,recipeId);
+            picture2Recipe.setLong(2,createdId);
+            picture2Recipe.executeUpdate();
 
-            PreparedStatement comment2User = connection.prepareStatement(sqlComment2User);
-            comment2User.setLong(1,createdId);
-            comment2User.setLong(2,userId);
-            comment2User.executeUpdate();
+            PreparedStatement picture2User = connection.prepareStatement(sqlPicture2User);
+            picture2User.setLong(1,createdId);
+            picture2User.setLong(2,userId);
+            picture2User.executeUpdate();
 
             Statement commitChanges = connection.createStatement();
             commitChanges.execute(sqlCommitTransaction);
@@ -164,18 +164,14 @@ public class PictureDB {
         }
 
         if (createdId != -1){
-//            return getCommentById(createdId);
+            return getPictureById(createdId);
         }
         return null;
     }
 
 
 
-    // picture by id
-    // picture by user
-    // picture by recipe
-    // new picture/link
-    // no update
+
     // delete picture
 
 }
