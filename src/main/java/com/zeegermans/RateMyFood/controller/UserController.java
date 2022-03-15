@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @CrossOrigin(origins = "*")
-    @GetMapping("get/user/commitid/{id}")
+    @GetMapping("get/user/commentid/{id}")
     public List<User> userByCommentId(@PathVariable long id) {
         return userDB.getUserByComment(id);
     }
@@ -83,7 +83,7 @@ public class UserController {
         String status = (String) body.get("status");
         String email = (String) body.get("email");
         String password = (String) body.get("password");
-        return userDB.createNewUser(name, realName,status,email,password);
+        return userDB.createNewUser(name, realName, status, email, password);
     }
 
     @CrossOrigin(origins = "*")
@@ -95,16 +95,14 @@ public class UserController {
         String status = (String) body.get("status");
         String email = (String) body.get("email");
         String password = (String) body.get("password");
-        return userDB.updateUser(id,name, realName,status,email,password);
+        return userDB.updateUser(id, name, realName, status, email, password);
     }
 
     @CrossOrigin(origins = "*")
-    @DeleteMapping("delete/ratings/{id}")
-    public boolean deleteRating(@PathVariable long id) {
+    @DeleteMapping("delete/user/{id}")
+    public boolean deleteUser(@PathVariable long id) {
         return userDB.deleteUser(id);
     }
-
-
 
 
 //    @CrossOrigin(origins = "*")
