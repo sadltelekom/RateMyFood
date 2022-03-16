@@ -95,21 +95,6 @@ public class RatingDB {
         return null;
     }
 
-    // TODO: Not Working... no clue .. necessary anyway?
-    public List<Rating> getRatingUserOfRecipe(long userId, long recipeId) {
-        String sql = "";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setLong(1, userId);
-            return getRatings(preparedStatement);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-
-        }
-        return null;
-    }
-
     public Long getAverageRatingByRecipe(long recipeId) {
         List<Rating> ratings = getAllRatingsByRecipe(recipeId);
         return calcAverage(ratings);
