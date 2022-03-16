@@ -12,6 +12,10 @@ import java.util.Map;
 
 @RestController
 public class RecipesController {
+    // Todo: get Course by Recipe ID
+    // TODO: get Category bay Recipe ID
+
+
 
     Connection connection = DBConnector.getInstance().getConnection();
     RecipesDB recipesDB = new RecipesDB();
