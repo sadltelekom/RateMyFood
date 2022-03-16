@@ -189,7 +189,6 @@ public class CommentsDB {
 
     // UPDATE COMMENT
     public List<Comments> updateComment (long commentId, String newComment) {
-            System.out.println("Meilenstein");
         String sql = "UPDATE comments SET comment=? WHERE id=? ";
         long rowsAffected = 0;
 
