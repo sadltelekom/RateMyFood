@@ -57,17 +57,29 @@ public class IngredientsDB {
     }
 
     public List<Ingredients> getIngredientByRecipeId(long id) {
-        String sql = "SELECT ingredients.* FROM recipes INNER JOIN recipes_has_ingredients ON recipes.id = recipes_has_ingredients.recipes_id INNER JOIN ingredients ON recipes_has_ingredients.ingredients_id = ingredients.id WHERE recipes.id = ?";
+        String sql = "SELECT ingredients.id AS id,ingredients.name AS name ,recipes_has_ingredients.amount AS amount FROM recipes INNER JOIN recipes_has_ingredients ON recipes.id = recipes_has_ingredients.recipes_id INNER JOIN ingredients ON recipes_has_ingredients.ingredients_id = ingredients.id WHERE recipes.id = ?";
+        List<Ingredients> filtered = new ArrayList<>();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, id);
-            return getIngredients(preparedStatement);
+
+            ResultSet result = preparedStatement.executeQuery();
+
+                while(result.next()) {
+                    Ingredients ingredients = new Ingredients(
+                            result.getLong("id"),
+                            result.getString("name")
+                    );
+                    ingredients.setAmount(result.getString("amount"));
+                    filtered.add(ingredients);
+                }
+
         }
         catch (SQLException e) {
             e.printStackTrace();
 
         }
-        return null;
+        return filtered;
     }
 
 
