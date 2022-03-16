@@ -1,5 +1,6 @@
 package com.zeegermans.RateMyFood.db;
 
+import com.zeegermans.RateMyFood.model.Category;
 import com.zeegermans.RateMyFood.model.Ingredients;
 import com.zeegermans.RateMyFood.model.Recipes;
 
@@ -24,6 +25,40 @@ public class RecipesDB {
                         result.getString("howto")
                 );
                 filtered.add(recipe);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return filtered;
+    }
+
+    public List<String> getRecipesCategoryList( PreparedStatement preparedStatement){
+        List<String> filtered = new ArrayList<>();
+
+        try {
+            ResultSet result = preparedStatement.executeQuery();
+
+            while(result.next()) {
+                String outputcategory = result.getString("category");
+                filtered.add(outputcategory);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return filtered;
+    }
+
+    public List<String> getRecipesCourseList( PreparedStatement preparedStatement){
+        List<String> filtered = new ArrayList<>();
+
+        try {
+            ResultSet result = preparedStatement.executeQuery();
+
+            while(result.next()) {
+                String outputcourse = result.getString("course");
+                filtered.add(outputcourse);
             }
 
         } catch (SQLException e) {
@@ -137,6 +172,39 @@ public class RecipesDB {
         }
         return null;
     }
+
+    public List<String> getRecipesCategory(long id) {
+        String sql ="SELECT category.category FROM recipes " +
+                "INNER JOIN recipes_has_category ON recipes.id=recipes_has_category.recipes_id " +
+                "INNER JOIN category ON recipes_has_category.category_id=category.id WHERE recipes.id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+            return getRecipesCategoryList(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+    public List<String> getRecipesCourse(long id) {
+        String sql ="SELECT category.course FROM recipes " +
+                "INNER JOIN recipes_has_category ON recipes.id=recipes_has_category.recipes_id " +
+                "INNER JOIN category ON recipes_has_category.category_id=category.id WHERE recipes.id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+            return getRecipesCourseList(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
 
     public List<Recipes> getRecipesByExactUserName(String username) {
         String sql ="SELECT recipes.* FROM user " +
@@ -347,9 +415,7 @@ public class RecipesDB {
     }
 
 
-    // recipe by category
-    // recipe by user
-    // recipe by ingredients
-    // recipe by rating
+
+
 
 }
