@@ -105,7 +105,7 @@ public class PictureDB {
                 lastId = e.getId();
             }
             lastId++;
-            return "pic_" + lastId + "_" + Calendar.getInstance().getTimeInMillis();
+            return "pic_" + lastId + "_" + Calendar.getInstance().getTimeInMillis() + ".png";
         }
         catch (SQLException e) {
             e.printStackTrace();
