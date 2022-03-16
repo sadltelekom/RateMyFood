@@ -7,15 +7,12 @@ import com.zeegermans.RateMyFood.model.Recipes;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Connection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 public class RecipesController {
-    // Todo: get Course by Recipe ID
-    // TODO: get Category bay Recipe ID
-
-
 
     Connection connection = DBConnector.getInstance().getConnection();
     RecipesDB recipesDB = new RecipesDB();
@@ -46,8 +43,10 @@ public class RecipesController {
 
     @CrossOrigin(origins = "*")
     @GetMapping("get/recipes/category/{id}")
-    public List<String> recipesCategory(@PathVariable long id) {
-        return recipesDB.getRecipesCategory(id);
+    public Map<String,String> recipesCategory(@PathVariable long id) {
+        Map<String,String> result = new HashMap<>();
+        result.put("category" ,recipesDB.getRecipesCategory(id).get(0));
+        return result;
     }
 
     @CrossOrigin(origins = "*")
