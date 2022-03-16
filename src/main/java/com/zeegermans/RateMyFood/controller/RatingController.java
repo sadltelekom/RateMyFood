@@ -1,9 +1,7 @@
 package com.zeegermans.RateMyFood.controller;
 
-import com.zeegermans.RateMyFood.db.CommentsDB;
 import com.zeegermans.RateMyFood.db.DBConnector;
 import com.zeegermans.RateMyFood.db.RatingDB;
-import com.zeegermans.RateMyFood.model.Comments;
 import com.zeegermans.RateMyFood.model.Rating;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +35,7 @@ public class RatingController {
 
         @CrossOrigin(origins = "*")
         @GetMapping("get/ratings/recipeaverage/{id}")
-        public Long averageRatingsRecipe(@PathVariable long id) {
+        public Map averageRatingsRecipe(@PathVariable long id) {
         return rating.getAverageRatingByRecipe(id);
         }
 
@@ -49,7 +47,7 @@ public class RatingController {
 
         @CrossOrigin(origins = "*")
         @GetMapping("get/ratings/useraverage/{id}")
-        public Long averageRatingsUser(@PathVariable long id) {
+        public Map averageRatingsUser(@PathVariable long id) {
         return rating.getAverageRatingByUser(id);
         }
 

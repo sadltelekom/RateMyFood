@@ -1,12 +1,12 @@
 package com.zeegermans.RateMyFood.db;
 
-import com.zeegermans.RateMyFood.model.Comments;
 import com.zeegermans.RateMyFood.model.Rating;
-import com.zeegermans.RateMyFood.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RatingDB {
     private Connection connection = DBConnector.getInstance().getConnection();
@@ -95,26 +95,34 @@ public class RatingDB {
         return null;
     }
 
-    public Long getAverageRatingByRecipe(long recipeId) {
+    public Map getAverageRatingByRecipe(long recipeId) {
         List<Rating> ratings = getAllRatingsByRecipe(recipeId);
-        return calcAverage(ratings);
+        Map<String, Long> average = new HashMap<>();
+        average.put("average", calcAverage(ratings));
+        return average;
     }
 
-    public Long getAverageRatingByUser(long userId) {
+    public Map getAverageRatingByUser(long userId) {
         List<Rating> ratings = getAllRatingsByRecipe(userId);
-        return calcAverage(ratings);
+        Map<String, Long> average = new HashMap<>();
+        average.put("average", calcAverage(ratings));
+        return average;
     }
 
     public Long calcAverage (List<Rating> ratings) {
         int sum = 0;
         int count = 0;
 
+        if (ratings.isEmpty()) {
+            return 0l;
+        }
+
         for (Rating rating : ratings) {
             sum+=rating.getRating();
             count++;
         }
 
-        return (long) (sum / count);
+        return (long)(sum / count);
     }
 
     // CREATE NEW RATING
