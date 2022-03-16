@@ -62,11 +62,11 @@ public class RecipesController {
         return recipesDB.getRecipesByExactIngredientsId(id);
     }
 
-    @CrossOrigin(origins = "*")
-    @GetMapping("get/recipes/category/{category}")
-    public List<Recipes> recipesByExactCategory(@PathVariable String category) {
-        return recipesDB.getRecipesByExactCategory(category);
-    }
+//    @CrossOrigin(origins = "*")
+//    @GetMapping("get/recipes/categoryname/{category}")
+//    public List<Recipes> recipesByExactCategory(@PathVariable String category) {
+//        return recipesDB.getRecipesByExactCategory(category);
+//    }
 
     @CrossOrigin(origins = "*")
     @GetMapping("get/recipes/ingredient/{ingredient}")
