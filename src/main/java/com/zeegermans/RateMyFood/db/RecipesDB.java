@@ -141,6 +141,22 @@ public class RecipesDB {
         return null;
     }
 
+    public List<Recipes> getRecipesByExactCourse(String course) {
+        String sql ="SELECT recipes.* FROM category " +
+                "INNER JOIN recipes_has_category ON category.id=recipes_has_category.category_id " +
+                "INNER JOIN recipes ON recipes_has_category.recipes_id=recipes.id WHERE category.course = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, course);
+            return getRecipes(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
     public List<Recipes> getRecipesByPartOfCategory(String category) {
         String sql = "SELECT recipes.* FROM category " +
                 "INNER JOIN recipes_has_category ON category.id=recipes_has_category.category_id " +
