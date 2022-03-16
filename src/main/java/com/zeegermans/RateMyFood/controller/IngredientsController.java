@@ -32,5 +32,9 @@ public class IngredientsController {
         return ingredients.getIngredientById(id);
     }
 
-
+    @CrossOrigin(origins = "*")
+    @GetMapping("get/ingredients/recipe/{id}")
+    public List<Ingredients> ingredientsByRecipeId(@PathVariable long id) {
+        return ingredients.getIngredientByRecipeId(id);
+    }
 }

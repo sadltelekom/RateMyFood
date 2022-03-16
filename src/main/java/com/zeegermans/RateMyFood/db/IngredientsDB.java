@@ -56,7 +56,19 @@ public class IngredientsDB {
         return null;
     }
 
+    public List<Ingredients> getIngredientByRecipeId(long id) {
+        String sql = "SELECT ingredients.* FROM recipes INNER JOIN recipes_has_ingredients ON recipes.id = recipes_has_ingredients.recipes_id INNER JOIN ingredients ON recipes_has_ingredients.ingredients_id = ingredients.id WHERE recipes.id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+            return getIngredients(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
 
+        }
+        return null;
+    }
 
 
     public List<Ingredients> getIngredientByExactName(String name) {
