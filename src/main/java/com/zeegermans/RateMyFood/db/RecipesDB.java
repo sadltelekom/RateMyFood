@@ -6,7 +6,9 @@ import com.zeegermans.RateMyFood.model.Recipes;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RecipesDB {
     private Connection connection = DBConnector.getInstance().getConnection();
@@ -65,6 +67,24 @@ public class RecipesDB {
             e.printStackTrace();
         }
         return filtered;
+    }
+
+    public Map<String, String> getRecipesIngredientsList( PreparedStatement preparedStatement){
+        Map<String,String> filteredMap = new HashMap<>();
+
+        try {
+            ResultSet result = preparedStatement.executeQuery();
+
+            while(result.next()) {
+                String name = result.getString("name");
+                String amount = result.getString("amount");
+                filteredMap.put(name, amount);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return filteredMap;
     }
 
     public List<Recipes> getAllRecipes() {
@@ -189,6 +209,7 @@ public class RecipesDB {
         return null;
     }
 
+
     public List<String> getRecipesCategory(long id) {
         String sql ="SELECT category.category FROM recipes " +
                 "INNER JOIN recipes_has_category ON recipes.id=recipes_has_category.recipes_id " +
@@ -221,6 +242,21 @@ public class RecipesDB {
         return null;
     }
 
+    public Map<String, String> getRecipesIngredients(long id) {
+        String sql ="SELECT ingredients.name AS name ,recipes_has_ingredients.amount AS amount FROM recipes " +
+                "INNER JOIN recipes_has_ingredients ON recipes.id = recipes_has_ingredients.recipes_id " +
+                "INNER JOIN ingredients ON recipes_has_ingredients.ingredients_id = ingredients.id WHERE recipes.id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+            return getRecipesIngredientsList(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
 
     public List<Recipes> getRecipesByExactUserName(String username) {
         String sql ="SELECT recipes.* FROM user " +

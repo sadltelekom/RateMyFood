@@ -58,6 +58,14 @@ public class RecipesController {
     }
 
     @CrossOrigin(origins = "*")
+    @GetMapping("get/recipes/ingredients/{id}")
+    public Map recipesIngredients(@PathVariable long id) {
+        Map<String,String> result = new HashMap<>();
+        result.put("ingredients" ,recipesDB.getRecipesIngredients(id).get(0));
+        return result;
+    }
+
+    @CrossOrigin(origins = "*")
     @GetMapping("get/recipes/ingredientsid/{id}")
     public List<Recipes> recipesByExactIngredientsId(@PathVariable long id) {
         return recipesDB.getRecipesByExactIngredientsId(id);
@@ -80,6 +88,8 @@ public class RecipesController {
     public List<Recipes> recipesByExactIngredient(@PathVariable String ingredient) {
         return recipesDB.getRecipesByExactIngredientsName(ingredient);
     }
+
+
 
     @CrossOrigin(origins = "*")
     @GetMapping("get/recipes/name/{name}")
