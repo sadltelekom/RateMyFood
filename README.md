@@ -89,7 +89,7 @@ API | Data
 --- | ---  
 get/ratings/recipeaverage/{id}|get average of ratings for recipe id
 get/ratings/useraverage/{id}|get average of ratings given by user id
-return: `Long`
+return: `Map`
 
 </br>
 
