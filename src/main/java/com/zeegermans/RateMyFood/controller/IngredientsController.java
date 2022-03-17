@@ -5,36 +5,55 @@ import com.zeegermans.RateMyFood.db.DBConnector;
 import com.zeegermans.RateMyFood.db.IngredientsDB;
 import com.zeegermans.RateMyFood.model.Comments;
 import com.zeegermans.RateMyFood.model.Ingredients;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import com.zeegermans.RateMyFood.model.Recipes;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class IngredientsController {
     // Todo: Get all ingredients by recipe ID
 
     private Connection connection = DBConnector.getInstance().getConnection();
-    IngredientsDB ingredients = new IngredientsDB();
+    IngredientsDB ingredientsDB = new IngredientsDB();
 
     @CrossOrigin(origins = "*")
     @GetMapping("get/ingredients/")
     public List<Ingredients> allIngredients() {
-        return ingredients.getAllIngredients();
+        return ingredientsDB.getAllIngredients();
     }
 
     @CrossOrigin(origins = "*")
     @GetMapping("get/ingredients/{id}")
     public List<Ingredients> ingredientsById(@PathVariable long id) {
-        return ingredients.getIngredientById(id);
+        return ingredientsDB.getIngredientById(id);
     }
 
     @CrossOrigin(origins = "*")
     @GetMapping("get/ingredients/recipe/{id}")
     public List<Ingredients> ingredientsByRecipeId(@PathVariable long id) {
-        return ingredients.getIngredientByRecipeId(id);
+        return ingredientsDB.getIngredientByRecipeId(id);
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("post/ingredients/")
+    public List<Ingredients> insertIngredients(@PathVariable String name) {
+        return ingredientsDB.insertIngredients(name);
+    }
+
+    @CrossOrigin(origins = "*")
+    @PatchMapping("update/ingredients/")
+    public List<Ingredients> updateIngredients(@RequestBody Map<String, Object> body) {
+        long id = (Long) body.get("id");
+        String name = (String) body.get("name");
+        return ingredientsDB.updateIngredients(id , name);
+    }
+
+    @CrossOrigin(origins = "*")
+    @DeleteMapping("delete/ingredients/{id}")
+    public boolean deleteIngredients(@PathVariable long id) {
+        return ingredientsDB.deleteIngredients(id);
     }
 }
