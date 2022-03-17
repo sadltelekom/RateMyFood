@@ -111,7 +111,7 @@ public class IngredientsDB {
         return null;
     }
 
-    public boolean deleteIngredientById(long id) {
+    public boolean deleteIngredients(long id) {
         String sqlStartTransaction = "START TRANSACTION";
         String sqlRecipes = "DELETE FROM recipes_has_ingredients WHERE recipes_has_ingredients.ingredients_id = ?";
         String sqlIngredients = "DELETE FROM ingredients WHERE id = ?";
@@ -171,15 +171,15 @@ public class IngredientsDB {
         }
     }
 
-    public List<Ingredients> updateIngredients(Ingredients ingredients) {
+    public List<Ingredients> updateIngredients(long id, String name) {
         String sql = "UPDATE Ingredients SET Name = ? WHERE id = ?";
         int affectedRows = 0;
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setString(1, ingredients.getName().toString());
-            preparedStatement.setLong(2, ingredients.getId());
+            preparedStatement.setString(1, name);
+            preparedStatement.setLong(2, id);
 
             affectedRows = preparedStatement.executeUpdate();
         } catch (Exception exception) {
@@ -187,7 +187,7 @@ public class IngredientsDB {
         }
 
         if (affectedRows == 1) {
-            return getIngredientById(ingredients.getId());
+            return getIngredientById(id);
             // return city;
         } else {
             return null;
