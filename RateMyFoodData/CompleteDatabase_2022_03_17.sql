@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle ratemyfood.category: ~4 rows (ungefähr)
+-- Exportiere Daten aus Tabelle ratemyfood.category: ~5 rows (ungefähr)
 DELETE FROM `category`;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
 INSERT INTO `category` (`id`, `category`, `course`) VALUES
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `ingredients` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle ratemyfood.ingredients: ~11 rows (ungefähr)
+-- Exportiere Daten aus Tabelle ratemyfood.ingredients: ~13 rows (ungefähr)
 DELETE FROM `ingredients`;
 /*!40000 ALTER TABLE `ingredients` DISABLE KEYS */;
 INSERT INTO `ingredients` (`id`, `name`) VALUES
@@ -97,7 +97,11 @@ INSERT INTO `ingredients` (`id`, `name`) VALUES
 	(10, 'Butter'),
 	(11, 'Blueberry'),
 	(12, 'Bacon'),
-	(13, 'Onion');
+	(13, 'Onion'),
+	(14, 'Salt'),
+	(15, 'Oil'),
+	(16, 'cream'),
+	(17, 'Sourkraut');
 /*!40000 ALTER TABLE `ingredients` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle ratemyfood.picture
@@ -107,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `picture` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle ratemyfood.picture: ~3 rows (ungefähr)
+-- Exportiere Daten aus Tabelle ratemyfood.picture: ~31 rows (ungefähr)
 DELETE FROM `picture`;
 /*!40000 ALTER TABLE `picture` DISABLE KEYS */;
 INSERT INTO `picture` (`id`, `link`) VALUES
@@ -216,7 +220,7 @@ CREATE TABLE IF NOT EXISTS `recipes_has_category` (
   CONSTRAINT `fk_recipes_has_category_recipes1` FOREIGN KEY (`recipes_id`) REFERENCES `recipes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle ratemyfood.recipes_has_category: ~8 rows (ungefähr)
+-- Exportiere Daten aus Tabelle ratemyfood.recipes_has_category: ~9 rows (ungefähr)
 DELETE FROM `recipes_has_category`;
 /*!40000 ALTER TABLE `recipes_has_category` DISABLE KEYS */;
 INSERT INTO `recipes_has_category` (`recipes_id`, `category_id`) VALUES
@@ -242,7 +246,7 @@ CREATE TABLE IF NOT EXISTS `recipes_has_comments` (
   CONSTRAINT `fk_recipes_has_comments_recipes1` FOREIGN KEY (`recipes_id`) REFERENCES `recipes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle ratemyfood.recipes_has_comments: ~2 rows (ungefähr)
+-- Exportiere Daten aus Tabelle ratemyfood.recipes_has_comments: ~3 rows (ungefähr)
 DELETE FROM `recipes_has_comments`;
 /*!40000 ALTER TABLE `recipes_has_comments` DISABLE KEYS */;
 INSERT INTO `recipes_has_comments` (`recipes_id`, `comments_id`) VALUES
@@ -263,17 +267,51 @@ CREATE TABLE IF NOT EXISTS `recipes_has_ingredients` (
   CONSTRAINT `fk_recipes_has_ingredients_recipes` FOREIGN KEY (`recipes_id`) REFERENCES `recipes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle ratemyfood.recipes_has_ingredients: ~7 rows (ungefähr)
+-- Exportiere Daten aus Tabelle ratemyfood.recipes_has_ingredients: ~41 rows (ungefähr)
 DELETE FROM `recipes_has_ingredients`;
 /*!40000 ALTER TABLE `recipes_has_ingredients` DISABLE KEYS */;
 INSERT INTO `recipes_has_ingredients` (`recipes_id`, `ingredients_id`, `amount`) VALUES
 	(1, 2, '500g'),
 	(1, 12, '200g'),
-	(1, 13, '20g'),
+	(1, 13, '1'),
 	(2, 4, '250g'),
 	(2, 5, '500g'),
 	(2, 8, '500g'),
-	(3, 1, '500g');
+	(2, 15, '50ml'),
+	(3, 1, '500g'),
+	(3, 4, '200g'),
+	(3, 7, '500g'),
+	(3, 8, ' 500g / 8pcs'),
+	(3, 13, '1'),
+	(3, 14, '10g'),
+	(3, 15, '30ml'),
+	(4, 8, ' 500g / 8pcs'),
+	(4, 10, '20g'),
+	(4, 13, '2'),
+	(4, 16, '100ml'),
+	(5, 3, '4'),
+	(5, 5, '500g'),
+	(5, 9, '1 L'),
+	(6, 6, '50g'),
+	(6, 9, '500ml'),
+	(6, 11, '500g'),
+	(6, 16, '200ml'),
+	(7, 2, '1kg'),
+	(7, 5, '50g'),
+	(7, 7, '1kg'),
+	(7, 13, '2'),
+	(7, 14, '20g'),
+	(8, 1, '500g'),
+	(8, 3, '2'),
+	(8, 4, '200g'),
+	(8, 12, '200g'),
+	(8, 13, '1'),
+	(8, 16, '200ml'),
+	(9, 2, '1kg'),
+	(9, 3, '2'),
+	(9, 5, '100g'),
+	(9, 14, '15g'),
+	(9, 17, '750g');
 /*!40000 ALTER TABLE `recipes_has_ingredients` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle ratemyfood.recipes_has_picture
@@ -287,7 +325,7 @@ CREATE TABLE IF NOT EXISTS `recipes_has_picture` (
   CONSTRAINT `fk_recipes_has_picture_recipes1` FOREIGN KEY (`recipes_id`) REFERENCES `recipes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle ratemyfood.recipes_has_picture: ~4 rows (ungefähr)
+-- Exportiere Daten aus Tabelle ratemyfood.recipes_has_picture: ~29 rows (ungefähr)
 DELETE FROM `recipes_has_picture`;
 /*!40000 ALTER TABLE `recipes_has_picture` DISABLE KEYS */;
 INSERT INTO `recipes_has_picture` (`recipes_id`, `picture_id`) VALUES
@@ -333,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `recipes_has_rating` (
   CONSTRAINT `fk_recipes_has_rating_recipes1` FOREIGN KEY (`recipes_id`) REFERENCES `recipes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle ratemyfood.recipes_has_rating: ~2 rows (ungefähr)
+-- Exportiere Daten aus Tabelle ratemyfood.recipes_has_rating: ~3 rows (ungefähr)
 DELETE FROM `recipes_has_rating`;
 /*!40000 ALTER TABLE `recipes_has_rating` DISABLE KEYS */;
 INSERT INTO `recipes_has_rating` (`recipes_id`, `rating_id`) VALUES
@@ -353,7 +391,7 @@ CREATE TABLE IF NOT EXISTS `recipes_has_user` (
   CONSTRAINT `fk_recipes_has_user_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle ratemyfood.recipes_has_user: ~2 rows (ungefähr)
+-- Exportiere Daten aus Tabelle ratemyfood.recipes_has_user: ~3 rows (ungefähr)
 DELETE FROM `recipes_has_user`;
 /*!40000 ALTER TABLE `recipes_has_user` DISABLE KEYS */;
 INSERT INTO `recipes_has_user` (`recipes_id`, `user_id`) VALUES
@@ -373,7 +411,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle ratemyfood.user: ~2 rows (ungefähr)
+-- Exportiere Daten aus Tabelle ratemyfood.user: ~3 rows (ungefähr)
 DELETE FROM `user`;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`id`, `name`, `realname`, `status`, `email`, `password`) VALUES
@@ -393,7 +431,7 @@ CREATE TABLE IF NOT EXISTS `user_has_rating` (
   CONSTRAINT `fk_user_has_rating_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle ratemyfood.user_has_rating: ~2 rows (ungefähr)
+-- Exportiere Daten aus Tabelle ratemyfood.user_has_rating: ~3 rows (ungefähr)
 DELETE FROM `user_has_rating`;
 /*!40000 ALTER TABLE `user_has_rating` DISABLE KEYS */;
 INSERT INTO `user_has_rating` (`user_id`, `rating_id`) VALUES
