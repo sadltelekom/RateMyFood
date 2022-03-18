@@ -50,4 +50,7 @@ public class CategoryDB {
         return CourseList.values();
     }
 
+    public void insertCategoryForRecipe (String name, long recipeId) {
+
+    }
 }
