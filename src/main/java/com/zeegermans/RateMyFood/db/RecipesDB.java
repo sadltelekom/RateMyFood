@@ -193,11 +193,53 @@ public class RecipesDB {
         return null;
     }
 
+    public List<Recipes> getRecipesByPartOfCourse(String course) {
+        String sql = "SELECT recipes.* FROM category " +
+                "INNER JOIN recipes_has_category ON category.id=recipes_has_category.category_id " +
+                "INNER JOIN recipes ON recipes_has_category.recipes_id=recipes.id WHERE category.course LIKE ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, "%" + course + "%");
+            return getRecipes(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+
+
     public List<Recipes> getRecipesBySearch(String search) {
         List<Recipes> searchList = getRecipesByPartOfIngredientsName(search);
-        searchList.addAll(getRecipesByPartOfName(search));
-        searchList.addAll(getRecipesByPartOfCategory(search));
-        searchList.addAll(getRecipesByPartOfUserName(search));
+        for (Recipes recipes : getRecipesByPartOfName(search)){
+            if (!searchList.contains(recipes)){
+                searchList.add(recipes);
+            }
+        }
+        for (Recipes recipes : getRecipesByPartOfCategory(search)){
+            if (!searchList.contains(recipes)){
+                searchList.add(recipes);
+            }
+        }
+        for (Recipes recipes : getRecipesByPartOfUserName(search)){
+            if (!searchList.contains(recipes)){
+                searchList.add(recipes);
+            }
+        }
+        for (Recipes recipes : getRecipesByPartOfCourse(search)){
+            if (!searchList.contains(recipes)){
+                searchList.add(recipes);
+            }
+        }
+
+
+
+//        searchList.addAll(getRecipesByPartOfName(search));
+//        searchList.addAll(getRecipesByPartOfCategory(search));
+//        searchList.addAll(getRecipesByPartOfUserName(search));
+//        searchList.addAll(getRecipesByPartOfCourse(search));
         return searchList;
 
     }
