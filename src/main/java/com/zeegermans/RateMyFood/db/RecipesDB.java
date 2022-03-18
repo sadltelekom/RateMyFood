@@ -193,6 +193,16 @@ public class RecipesDB {
         return null;
     }
 
+    public List<Recipes> getRecipesBySearch(String search) {
+        List<Recipes> searchList = getRecipesByPartOfIngredientsName(search);
+        searchList.addAll(getRecipesByPartOfName(search));
+        searchList.addAll(getRecipesByPartOfCategory(search));
+        searchList.addAll(getRecipesByPartOfUserName(search));
+        return searchList;
+
+    }
+
+
     public List<Recipes> getRecipesByExactCategoryId(long id) {
         String sql ="SELECT recipes.* FROM category " +
                 "INNER JOIN recipes_has_category ON category.id=recipes_has_category.category_id " +

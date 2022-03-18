@@ -78,6 +78,12 @@ public class RecipesController {
     }
 
     @CrossOrigin(origins = "*")
+    @GetMapping("get/recipes/search/{search}")
+    public List<Recipes> recipesBySearch(@PathVariable String search) {
+        return recipesDB.getRecipesBySearch(search);
+    }
+
+    @CrossOrigin(origins = "*")
     @GetMapping("get/recipes/coursename/{course}")
     public List<Recipes> recipesByExactCourse(@PathVariable String course) {
         return recipesDB.getRecipesByExactCourse(course);
