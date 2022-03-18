@@ -194,7 +194,20 @@ public class IngredientsDB {
         }
     }
 
+    public void insertIngredientToRecipe(Ingredients ingredient, long recipeId) {
+        String sql = "INSERT INTO recipes_has_ingredients VALUES(?,?,?)";
 
-    // ingredients ...
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, recipeId);
+            preparedStatement.setLong(2,ingredient.getId());
+            preparedStatement.setString(3,ingredient.getAmount());
+            preparedStatement.executeUpdate();
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // ingredients ...
+    }
 }
