@@ -60,4 +60,9 @@ public class Recipes {
                 ", howto='" + howto + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.id==((Recipes)obj).id;
+    }
 }

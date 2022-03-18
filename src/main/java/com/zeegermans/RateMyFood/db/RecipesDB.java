@@ -193,6 +193,54 @@ public class RecipesDB {
         return null;
     }
 
+    public List<Recipes> getRecipesByPartOfCourse(String course) {
+        String sql = "SELECT recipes.* FROM category " +
+                "INNER JOIN recipes_has_category ON category.id=recipes_has_category.category_id " +
+                "INNER JOIN recipes ON recipes_has_category.recipes_id=recipes.id WHERE category.course LIKE ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, "%" + course + "%");
+            return getRecipes(preparedStatement);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+
+
+    public List<Recipes> getRecipesBySearch(String search) {
+        List<Recipes> searchList = getRecipesByPartOfName(search);
+
+        for (Recipes recipesingredients : getRecipesByPartOfIngredientsName(search)){
+            if (searchList.contains(recipesingredients) == false){
+
+                searchList.add(recipesingredients);
+            }
+        }
+        for (Recipes recipescategory : getRecipesByPartOfCategory(search)){
+            if (searchList.contains(recipescategory) == false){
+
+                searchList.add(recipescategory);
+            }
+        }
+        for (Recipes recipesusername : getRecipesByPartOfUserName(search)){
+            if (searchList.contains(recipesusername) == false){
+                searchList.add(recipesusername);
+            }
+        }
+        for (Recipes recipescourse : getRecipesByPartOfCourse(search)){
+            if (searchList.contains(recipescourse) == false){
+                searchList.add(recipescourse);
+            }
+        }
+        return searchList;
+
+    }
+
+
     public List<Recipes> getRecipesByExactCategoryId(long id) {
         String sql ="SELECT recipes.* FROM category " +
                 "INNER JOIN recipes_has_category ON category.id=recipes_has_category.category_id " +
