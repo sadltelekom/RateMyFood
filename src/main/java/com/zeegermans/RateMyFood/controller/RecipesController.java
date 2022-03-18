@@ -2,11 +2,14 @@ package com.zeegermans.RateMyFood.controller;
 
 
 import com.zeegermans.RateMyFood.db.DBConnector;
+import com.zeegermans.RateMyFood.db.IngredientsDB;
 import com.zeegermans.RateMyFood.db.RecipesDB;
+import com.zeegermans.RateMyFood.model.Ingredients;
 import com.zeegermans.RateMyFood.model.Recipes;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,10 +133,17 @@ public class RecipesController {
     @CrossOrigin(origins = "*")
     @PostMapping("post/recipes/")
     public List<Recipes> newRecipes(@RequestBody Map<String, Object> body) {
+
+        IngredientsDB ingredientsDB = new IngredientsDB();
+
         String name = (String) body.get("name");
         int time = (Integer) body.get("time");
         String howto = (String) body.get("howto");
-        return recipesDB.insertRecipes(name, time, howto);
+        String category = (String) body.get("category");
+        ArrayList<Object> ingredients = (ArrayList<Object>) body.get("ingredients");
+
+        return null;
+
     }
 
     @CrossOrigin(origins = "*")
