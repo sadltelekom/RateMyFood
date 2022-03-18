@@ -4,6 +4,7 @@ package com.zeegermans.RateMyFood.controller;
 import com.zeegermans.RateMyFood.db.DBConnector;
 import com.zeegermans.RateMyFood.db.IngredientsDB;
 import com.zeegermans.RateMyFood.db.RecipesDB;
+import com.zeegermans.RateMyFood.enums.CategoryList;
 import com.zeegermans.RateMyFood.model.Ingredients;
 import com.zeegermans.RateMyFood.model.Recipes;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +49,15 @@ public class RecipesController {
     @GetMapping("get/recipes/category/{id}")
     public Map recipesCategory(@PathVariable long id) {
         Map<String,String> result = new HashMap<>();
-        result.put("category" ,recipesDB.getRecipesCategory(id).get(0));
+        try{
+            result.put("category" ,recipesDB.getRecipesCategory(id).get(0));
+        }
+
+        catch (Exception e) {
+            result.put("category" , CategoryList.MEATLOVER.toString());
+        }
+
+
         return result;
     }
 
@@ -139,16 +148,41 @@ public class RecipesController {
     @CrossOrigin(origins = "*")
     @PostMapping("post/recipes/")
     public List<Recipes> newRecipes(@RequestBody Map<String, Object> body) {
-
+        List<Recipes> filtered = new ArrayList<>();
         IngredientsDB ingredientsDB = new IngredientsDB();
+
+        System.out.println("Got new Recipe");
 
         String name = (String) body.get("name");
         int time = (Integer) body.get("time");
         String howto = (String) body.get("howto");
         String category = (String) body.get("category");
-        ArrayList<Object> ingredients = (ArrayList<Object>) body.get("ingredients");
+        ArrayList<HashMap<String, String>> ingredients = new ArrayList<>();
+        ingredients = (ArrayList<HashMap<String, String>>) body.get("ingredients");
+        List<Ingredients> newIngredientsArray = new ArrayList<>();
 
-        return null;
+        Recipes newRecipe = recipesDB.insertRecipes(name,time,howto).get(0);
+        long newRecipeId = newRecipe.getId();
+
+        System.out.println("New Recipe ID = " + newRecipeId);
+
+        for(HashMap<String,String> loopIngredient : ingredients) {
+            Ingredients newIngredient = new Ingredients(
+                    Long.parseLong(loopIngredient.get("id")),
+                    loopIngredient.get("name"),
+                    loopIngredient.get("amount")
+            );
+            newIngredientsArray.add(newIngredient);
+        }
+
+        for(Ingredients newOne : newIngredientsArray) {
+            ingredientsDB.insertIngredientToRecipe(newOne,newRecipeId);
+            System.out.println("Added :" + newOne);
+        }
+
+        filtered.add(newRecipe);
+
+        return filtered;
 
     }
 
