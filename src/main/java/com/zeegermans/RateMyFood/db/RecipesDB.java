@@ -212,34 +212,30 @@ public class RecipesDB {
 
 
     public List<Recipes> getRecipesBySearch(String search) {
-        List<Recipes> searchList = getRecipesByPartOfIngredientsName(search);
-        for (Recipes recipes : getRecipesByPartOfName(search)){
-            if (!searchList.contains(recipes)){
-                searchList.add(recipes);
-            }
-        }
-        for (Recipes recipes : getRecipesByPartOfCategory(search)){
-            if (!searchList.contains(recipes)){
-                searchList.add(recipes);
-            }
-        }
-        for (Recipes recipes : getRecipesByPartOfUserName(search)){
-            if (!searchList.contains(recipes)){
-                searchList.add(recipes);
-            }
-        }
-        for (Recipes recipes : getRecipesByPartOfCourse(search)){
-            if (!searchList.contains(recipes)){
-                searchList.add(recipes);
-            }
-        }
+        List<Recipes> searchList = getRecipesByPartOfName(search);
 
+        for (Recipes recipesingredients : getRecipesByPartOfIngredientsName(search)){
+            if (searchList.contains(recipesingredients) == false){
 
+                searchList.add(recipesingredients);
+            }
+        }
+        for (Recipes recipescategory : getRecipesByPartOfCategory(search)){
+            if (searchList.contains(recipescategory) == false){
 
-//        searchList.addAll(getRecipesByPartOfName(search));
-//        searchList.addAll(getRecipesByPartOfCategory(search));
-//        searchList.addAll(getRecipesByPartOfUserName(search));
-//        searchList.addAll(getRecipesByPartOfCourse(search));
+                searchList.add(recipescategory);
+            }
+        }
+        for (Recipes recipesusername : getRecipesByPartOfUserName(search)){
+            if (searchList.contains(recipesusername) == false){
+                searchList.add(recipesusername);
+            }
+        }
+        for (Recipes recipescourse : getRecipesByPartOfCourse(search)){
+            if (searchList.contains(recipescourse) == false){
+                searchList.add(recipescourse);
+            }
+        }
         return searchList;
 
     }
