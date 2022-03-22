@@ -11,13 +11,13 @@ import java.util.Map;
 public class RatingDB {
     private Connection connection = DBConnector.getInstance().getConnection();
 
-    public List<Rating> getRatings(PreparedStatement preparedStatement){
+    public List<Rating> getRatings(PreparedStatement preparedStatement) {
         List<Rating> filtered = new ArrayList<>();
 
         try {
             ResultSet result = preparedStatement.executeQuery();
 
-            while(result.next()) {
+            while (result.next()) {
                 Rating rating = new Rating(
                         result.getLong("id"),
                         result.getInt("rating")
@@ -37,8 +37,7 @@ public class RatingDB {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             return getRatings(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -51,8 +50,7 @@ public class RatingDB {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, ratingId);
             return getRatings(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -69,8 +67,7 @@ public class RatingDB {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, recipeId);
             return getRatings(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -87,8 +84,7 @@ public class RatingDB {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, userId);
             return getRatings(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -109,7 +105,7 @@ public class RatingDB {
         return average;
     }
 
-    public Long calcAverage (List<Rating> ratings) {
+    public Long calcAverage(List<Rating> ratings) {
         int sum = 0;
         int count = 0;
 
@@ -118,16 +114,16 @@ public class RatingDB {
         }
 
         for (Rating rating : ratings) {
-            sum+=rating.getRating();
+            sum += rating.getRating();
             count++;
         }
 
-        return (long)(sum / count);
+        return (long) (sum / count);
     }
 
     // CREATE NEW RATING
-    public List<Rating> createNewRating(long rating, long recipeId, long userId){
-        String sqlStartTransaction ="START TRANSACTION";
+    public List<Rating> createNewRating(long rating, long recipeId, long userId) {
+        String sqlStartTransaction = "START TRANSACTION";
         String sqlRating = "INSERT INTO rating VALUES (DEFAULT, ?)";
         String sqlRating2Recipe = "INSERT INTO recipes_has_rating VALUES (?, ?)"; // -- recipe_id, rating_id
         String sqlRating2User = "INSERT INTO user_has_rating VALUES (?, ?)"; // -- user_id, rating_id
@@ -139,29 +135,29 @@ public class RatingDB {
             startTransaction.execute(sqlStartTransaction);
 
             PreparedStatement newRating = connection.prepareStatement(sqlRating, Statement.RETURN_GENERATED_KEYS);
-            newRating.setLong(1,rating);
+            newRating.setLong(1, rating);
             newRating.executeUpdate();
 
             ResultSet result = newRating.getGeneratedKeys();
 
-            if (result.next()){
+            if (result.next()) {
                 createdId = result.getLong(1);
             }
 
             PreparedStatement rating2Recipe = connection.prepareStatement(sqlRating2Recipe);
-            rating2Recipe.setLong(1,recipeId);
-            rating2Recipe.setLong(2,createdId);
+            rating2Recipe.setLong(1, recipeId);
+            rating2Recipe.setLong(2, createdId);
             rating2Recipe.executeUpdate();
 
             PreparedStatement rating2User = connection.prepareStatement(sqlRating2User);
-            rating2User.setLong(1,userId);
-            rating2User.setLong(2,createdId);
+            rating2User.setLong(1, userId);
+            rating2User.setLong(2, createdId);
             rating2User.executeUpdate();
 
             Statement commitChanges = connection.createStatement();
             commitChanges.execute(sqlCommitTransaction);
 
-        } catch (SQLException exception){
+        } catch (SQLException exception) {
             exception.printStackTrace();
             try {
                 String sqlRollback = "ROLLBACK";
@@ -172,15 +168,15 @@ public class RatingDB {
             }
         }
 
-        if (createdId != -1){
+        if (createdId != -1) {
             return getRatingsById(createdId);
         }
         return null;
     }
 
     // DELETE RATING
-    public boolean deleteRating(long ratingId){
-        String sqlStartTransaction ="START TRANSACTION";
+    public boolean deleteRating(long ratingId) {
+        String sqlStartTransaction = "START TRANSACTION";
         String sqlRating = "DELETE FROM rating WHERE id=?";
         String sqlRating2Recipe = "DELETE FROM recipes_has_rating WHERE recipes_has_rating.rating_id=?";
         String sqlRating2User = "DELETE FROM user_has_rating WHERE user_has_rating.rating_id=?";
@@ -192,21 +188,21 @@ public class RatingDB {
             startTransaction.execute(sqlStartTransaction);
 
             PreparedStatement deleteRating2Recipe = connection.prepareStatement(sqlRating2Recipe);
-            deleteRating2Recipe.setLong(1,ratingId);
-            affectedRows+= deleteRating2Recipe.executeUpdate();
+            deleteRating2Recipe.setLong(1, ratingId);
+            affectedRows += deleteRating2Recipe.executeUpdate();
 
             PreparedStatement deleteRating2User = connection.prepareStatement(sqlRating2User);
-            deleteRating2User.setLong(1,ratingId);
-            affectedRows+= deleteRating2User.executeUpdate();
+            deleteRating2User.setLong(1, ratingId);
+            affectedRows += deleteRating2User.executeUpdate();
 
             PreparedStatement deleteRating = connection.prepareStatement(sqlRating);
-            deleteRating.setLong(1,ratingId);
-            affectedRows+= deleteRating.executeUpdate();
+            deleteRating.setLong(1, ratingId);
+            affectedRows += deleteRating.executeUpdate();
 
             Statement commitChanges = connection.createStatement();
             commitChanges.execute(sqlCommitTransaction);
 
-        } catch (SQLException exception){
+        } catch (SQLException exception) {
             exception.printStackTrace();
             try {
                 String sqlRollback = "ROLLBACK";
@@ -220,7 +216,7 @@ public class RatingDB {
     }
 
     // UPDATE RATING
-    public List<Rating> updateRating (long ratingId, long newRating) {
+    public List<Rating> updateRating(long ratingId, long newRating) {
         String sql = "UPDATE rating SET rating=? WHERE id=? ";
         long rowsAffected = 0;
 
@@ -230,11 +226,11 @@ public class RatingDB {
             preparedStatement.setLong(2, ratingId);
             rowsAffected = preparedStatement.executeUpdate();
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (rowsAffected == 1){
+        if (rowsAffected == 1) {
             return getRatingsById(ratingId);
         } else
             return null;

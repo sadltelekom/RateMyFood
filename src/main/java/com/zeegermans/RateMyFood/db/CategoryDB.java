@@ -14,17 +14,17 @@ import java.util.List;
 public class CategoryDB {
     private Connection connection = DBConnector.getInstance().getConnection();
 
-    public List<Category> getCategory(PreparedStatement preparedStatement){
+    public List<Category> getCategory(PreparedStatement preparedStatement) {
         List<Category> filtered = new ArrayList<>();
 
         try {
             ResultSet result = preparedStatement.executeQuery();
 
-            while(result.next()) {
+            while (result.next()) {
                 Category category = new Category(
                         result.getLong("id"),
                         CategoryList.valueOf(result.getString("category")),
-                        CourseList.valueOf(result.getString("course"))                );
+                        CourseList.valueOf(result.getString("course")));
                 filtered.add(category);
             }
 
@@ -36,21 +36,14 @@ public class CategoryDB {
 
     public Object getAllCategories() {
         return CategoryList.values();
-//        String sql = "SELECT * FROM category";
-//        try {
-//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//            return getCategory(preparedStatement);
-//        }
-//        catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+
     }
 
     public Object getAllCourses() {
         return CourseList.values();
     }
 
-    public void insertCategoryForRecipe (String name, long recipeId) {
+    public void insertCategoryForRecipe(String name, long recipeId) {
 
     }
 }

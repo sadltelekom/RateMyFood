@@ -14,6 +14,7 @@ public class Ingredients {
         this.id = id;
         this.name = name;
     }
+
     public Ingredients(long id, String name, String amount) {
         this.id = id;
         this.name = name;

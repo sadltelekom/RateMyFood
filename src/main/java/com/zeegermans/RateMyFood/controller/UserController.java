@@ -2,7 +2,6 @@ package com.zeegermans.RateMyFood.controller;
 
 import com.zeegermans.RateMyFood.db.DBConnector;
 import com.zeegermans.RateMyFood.db.UserDB;
-import com.zeegermans.RateMyFood.model.Rating;
 import com.zeegermans.RateMyFood.model.User;
 import org.springframework.web.bind.annotation.*;
 

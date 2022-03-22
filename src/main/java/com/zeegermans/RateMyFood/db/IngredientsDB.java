@@ -9,13 +9,13 @@ import java.util.List;
 public class IngredientsDB {
     private Connection connection = DBConnector.getInstance().getConnection();
 
-    public List<Ingredients> getIngredients(PreparedStatement preparedStatement){
+    public List<Ingredients> getIngredients(PreparedStatement preparedStatement) {
         List<Ingredients> filtered = new ArrayList<>();
 
         try {
             ResultSet result = preparedStatement.executeQuery();
 
-            while(result.next()) {
+            while (result.next()) {
                 Ingredients ingredients = new Ingredients(
                         result.getLong("id"),
                         result.getString("name")
@@ -34,8 +34,7 @@ public class IngredientsDB {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             return getIngredients(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -48,8 +47,7 @@ public class IngredientsDB {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, id);
             return getIngredients(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -65,17 +63,16 @@ public class IngredientsDB {
 
             ResultSet result = preparedStatement.executeQuery();
 
-                while(result.next()) {
-                    Ingredients ingredients = new Ingredients(
-                            result.getLong("id"),
-                            result.getString("name")
-                    );
-                    ingredients.setAmount(result.getString("amount"));
-                    filtered.add(ingredients);
-                }
+            while (result.next()) {
+                Ingredients ingredients = new Ingredients(
+                        result.getLong("id"),
+                        result.getString("name")
+                );
+                ingredients.setAmount(result.getString("amount"));
+                filtered.add(ingredients);
+            }
 
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -89,8 +86,7 @@ public class IngredientsDB {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, name);
             return getIngredients(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -103,8 +99,7 @@ public class IngredientsDB {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, "%" + name + "%");
             return getIngredients(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -165,7 +160,7 @@ public class IngredientsDB {
 
         if (insertedId != -1) {
             return getIngredientById(insertedId);
-//
+
         } else {
             return null;
         }
@@ -200,14 +195,14 @@ public class IngredientsDB {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, recipeId);
-            preparedStatement.setLong(2,ingredient.getId());
-            preparedStatement.setString(3,ingredient.getAmount());
+            preparedStatement.setLong(2, ingredient.getId());
+            preparedStatement.setString(3, ingredient.getAmount());
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        // ingredients ...
+
     }
 }

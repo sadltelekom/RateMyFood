@@ -14,17 +14,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class FileUploadController {
     @CrossOrigin(origins = "*")
     @PostMapping("/upload/{id}")
-    public String handleFileUpload(@PathVariable long id,@RequestParam("file") MultipartFile file,
+    public String handleFileUpload(@PathVariable long id, @RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
         PictureDB picture = new PictureDB();
 
-        String newFileName =  picture.createNewPictureName();
+        String newFileName = picture.createNewPictureName();
 
-        picture.createNewPicture(newFileName,id,1);
+        picture.createNewPicture(newFileName, id, 1);
         FileStorage fileStorage = new FileStorage();
-        fileStorage.saveFile(file,newFileName);
+        fileStorage.saveFile(file, newFileName);
         return "";
     }
 

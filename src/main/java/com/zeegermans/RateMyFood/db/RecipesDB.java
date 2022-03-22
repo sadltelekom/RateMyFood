@@ -1,7 +1,6 @@
 package com.zeegermans.RateMyFood.db;
 
-import com.zeegermans.RateMyFood.model.Category;
-import com.zeegermans.RateMyFood.model.Ingredients;
+
 import com.zeegermans.RateMyFood.model.Recipes;
 
 import java.sql.*;
@@ -13,13 +12,13 @@ import java.util.Map;
 public class RecipesDB {
     private Connection connection = DBConnector.getInstance().getConnection();
 
-    public List<Recipes> getRecipes( PreparedStatement preparedStatement){
+    public List<Recipes> getRecipes(PreparedStatement preparedStatement) {
         List<Recipes> filtered = new ArrayList<>();
 
         try {
             ResultSet result = preparedStatement.executeQuery();
 
-            while(result.next()) {
+            while (result.next()) {
                 Recipes recipe = new Recipes(
                         result.getLong("id"),
                         result.getString("name"),
@@ -35,13 +34,13 @@ public class RecipesDB {
         return filtered;
     }
 
-    public List<String> getRecipesCategoryList( PreparedStatement preparedStatement){
+    public List<String> getRecipesCategoryList(PreparedStatement preparedStatement) {
         List<String> filtered = new ArrayList<>();
 
         try {
             ResultSet result = preparedStatement.executeQuery();
 
-            while(result.next()) {
+            while (result.next()) {
                 String outputcategory = result.getString("category");
                 filtered.add(outputcategory);
             }
@@ -52,13 +51,13 @@ public class RecipesDB {
         return filtered;
     }
 
-    public List<String> getRecipesCourseList( PreparedStatement preparedStatement){
+    public List<String> getRecipesCourseList(PreparedStatement preparedStatement) {
         List<String> filtered = new ArrayList<>();
 
         try {
             ResultSet result = preparedStatement.executeQuery();
 
-            while(result.next()) {
+            while (result.next()) {
                 String outputcourse = result.getString("course");
                 filtered.add(outputcourse);
             }
@@ -69,13 +68,13 @@ public class RecipesDB {
         return filtered;
     }
 
-    public Map<String, String> getRecipesIngredientsList( PreparedStatement preparedStatement){
-        Map<String,String> filteredMap = new HashMap<>();
+    public Map<String, String> getRecipesIngredientsList(PreparedStatement preparedStatement) {
+        Map<String, String> filteredMap = new HashMap<>();
 
         try {
             ResultSet result = preparedStatement.executeQuery();
 
-            while(result.next()) {
+            while (result.next()) {
                 String name = result.getString("name");
                 String amount = result.getString("amount");
                 filteredMap.put(name, amount);
@@ -92,8 +91,7 @@ public class RecipesDB {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             return getRecipes(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -106,15 +104,12 @@ public class RecipesDB {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, id);
             return getRecipes(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
         return null;
     }
-
-
 
 
     public List<Recipes> getRecipesByExactName(String name) {
@@ -123,8 +118,7 @@ public class RecipesDB {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, name);
             return getRecipes(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -137,8 +131,7 @@ public class RecipesDB {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, "%" + name + "%");
             return getRecipes(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -146,15 +139,14 @@ public class RecipesDB {
     }
 
     public List<Recipes> getRecipesByExactCategory(String category) {
-        String sql ="SELECT recipes.* FROM category " +
+        String sql = "SELECT recipes.* FROM category " +
                 "INNER JOIN recipes_has_category ON category.id=recipes_has_category.category_id " +
                 "INNER JOIN recipes ON recipes_has_category.recipes_id=recipes.id WHERE category.category = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, category);
             return getRecipes(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -162,15 +154,14 @@ public class RecipesDB {
     }
 
     public List<Recipes> getRecipesByExactCourse(String course) {
-        String sql ="SELECT recipes.* FROM category " +
+        String sql = "SELECT recipes.* FROM category " +
                 "INNER JOIN recipes_has_category ON category.id=recipes_has_category.category_id " +
                 "INNER JOIN recipes ON recipes_has_category.recipes_id=recipes.id WHERE category.course = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, course);
             return getRecipes(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -185,8 +176,7 @@ public class RecipesDB {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, "%" + category + "%");
             return getRecipes(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -201,8 +191,7 @@ public class RecipesDB {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, "%" + course + "%");
             return getRecipes(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -210,29 +199,28 @@ public class RecipesDB {
     }
 
 
-
     public List<Recipes> getRecipesBySearch(String search) {
         List<Recipes> searchList = getRecipesByPartOfName(search);
 
-        for (Recipes recipesingredients : getRecipesByPartOfIngredientsName(search)){
-            if (searchList.contains(recipesingredients) == false){
+        for (Recipes recipesingredients : getRecipesByPartOfIngredientsName(search)) {
+            if (searchList.contains(recipesingredients) == false) {
 
                 searchList.add(recipesingredients);
             }
         }
-        for (Recipes recipescategory : getRecipesByPartOfCategory(search)){
-            if (searchList.contains(recipescategory) == false){
+        for (Recipes recipescategory : getRecipesByPartOfCategory(search)) {
+            if (searchList.contains(recipescategory) == false) {
 
                 searchList.add(recipescategory);
             }
         }
-        for (Recipes recipesusername : getRecipesByPartOfUserName(search)){
-            if (searchList.contains(recipesusername) == false){
+        for (Recipes recipesusername : getRecipesByPartOfUserName(search)) {
+            if (searchList.contains(recipesusername) == false) {
                 searchList.add(recipesusername);
             }
         }
-        for (Recipes recipescourse : getRecipesByPartOfCourse(search)){
-            if (searchList.contains(recipescourse) == false){
+        for (Recipes recipescourse : getRecipesByPartOfCourse(search)) {
+            if (searchList.contains(recipescourse) == false) {
                 searchList.add(recipescourse);
             }
         }
@@ -242,15 +230,14 @@ public class RecipesDB {
 
 
     public List<Recipes> getRecipesByExactCategoryId(long id) {
-        String sql ="SELECT recipes.* FROM category " +
+        String sql = "SELECT recipes.* FROM category " +
                 "INNER JOIN recipes_has_category ON category.id=recipes_has_category.category_id " +
                 "INNER JOIN recipes ON recipes_has_category.recipes_id=recipes.id WHERE category.id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, id);
             return getRecipes(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -259,15 +246,14 @@ public class RecipesDB {
 
 
     public List<String> getRecipesCategory(long id) {
-        String sql ="SELECT category.category FROM recipes " +
+        String sql = "SELECT category.category FROM recipes " +
                 "INNER JOIN recipes_has_category ON recipes.id=recipes_has_category.recipes_id " +
                 "INNER JOIN category ON recipes_has_category.category_id=category.id WHERE recipes.id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, id);
             return getRecipesCategoryList(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -275,15 +261,14 @@ public class RecipesDB {
     }
 
     public List<String> getRecipesCourse(long id) {
-        String sql ="SELECT category.course FROM recipes " +
+        String sql = "SELECT category.course FROM recipes " +
                 "INNER JOIN recipes_has_category ON recipes.id=recipes_has_category.recipes_id " +
                 "INNER JOIN category ON recipes_has_category.category_id=category.id WHERE recipes.id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, id);
             return getRecipesCourseList(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -291,15 +276,14 @@ public class RecipesDB {
     }
 
     public Map<String, String> getRecipesIngredients(long id) {
-        String sql ="SELECT ingredients.name AS name ,recipes_has_ingredients.amount AS amount FROM recipes " +
+        String sql = "SELECT ingredients.name AS name ,recipes_has_ingredients.amount AS amount FROM recipes " +
                 "INNER JOIN recipes_has_ingredients ON recipes.id = recipes_has_ingredients.recipes_id " +
                 "INNER JOIN ingredients ON recipes_has_ingredients.ingredients_id = ingredients.id WHERE recipes.id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, id);
             return getRecipesIngredientsList(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -307,7 +291,7 @@ public class RecipesDB {
     }
 
     public List<Recipes> getRecipesByExactUserName(String username) {
-        String sql ="SELECT recipes.* FROM user " +
+        String sql = "SELECT recipes.* FROM user " +
                 "INNER JOIN recipes_has_user ON user.id=recipes_has_user.user_id " +
                 "INNER JOIN recipes ON recipes_has_user.recipes_id=recipes.id WHERE user.name = ? OR user.realname = ?";
         try {
@@ -315,8 +299,7 @@ public class RecipesDB {
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, username);
             return getRecipes(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -332,8 +315,7 @@ public class RecipesDB {
             preparedStatement.setString(1, "%" + username + "%");
             preparedStatement.setString(2, "%" + username + "%");
             return getRecipes(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -341,15 +323,14 @@ public class RecipesDB {
     }
 
     public List<Recipes> getRecipesByExactUserId(long id) {
-        String sql ="SELECT recipes.* FROM user " +
+        String sql = "SELECT recipes.* FROM user " +
                 "INNER JOIN recipes_has_user ON user.id=recipes_has_user.user_id " +
                 "INNER JOIN recipes ON recipes_has_user.recipes_id=recipes.id WHERE user.id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, id);
             return getRecipes(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -357,15 +338,14 @@ public class RecipesDB {
     }
 
     public List<Recipes> getRecipesByExactIngredientsName(String name) {
-        String sql ="SELECT recipes.* FROM ingredients " +
+        String sql = "SELECT recipes.* FROM ingredients " +
                 "INNER JOIN recipes_has_ingredients ON ingredients.id=recipes_has_ingredients.ingredients_id " +
                 "INNER JOIN recipes ON recipes_has_ingredients.recipes_id=recipes.id WHERE ingredients.name = ? ";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, name);
             return getRecipes(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -381,8 +361,7 @@ public class RecipesDB {
             preparedStatement.setString(1, "%" + name + "%");
 
             return getRecipes(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
@@ -397,14 +376,12 @@ public class RecipesDB {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, id);
             return getRecipes(preparedStatement);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
 
         }
         return null;
     }
-
 
 
     public boolean deleteRecipes(long id) {
@@ -513,9 +490,6 @@ public class RecipesDB {
             return null;
         }
     }
-
-
-
 
 
 }

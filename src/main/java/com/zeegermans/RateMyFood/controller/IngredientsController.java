@@ -1,11 +1,11 @@
 package com.zeegermans.RateMyFood.controller;
 
-import com.zeegermans.RateMyFood.db.CommentsDB;
+
 import com.zeegermans.RateMyFood.db.DBConnector;
 import com.zeegermans.RateMyFood.db.IngredientsDB;
-import com.zeegermans.RateMyFood.model.Comments;
+
 import com.zeegermans.RateMyFood.model.Ingredients;
-import com.zeegermans.RateMyFood.model.Recipes;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Connection;
@@ -14,7 +14,6 @@ import java.util.Map;
 
 @RestController
 public class IngredientsController {
-    // Todo: Get all ingredients by recipe ID
 
     private Connection connection = DBConnector.getInstance().getConnection();
     IngredientsDB ingredientsDB = new IngredientsDB();
@@ -48,7 +47,7 @@ public class IngredientsController {
     public List<Ingredients> updateIngredients(@RequestBody Map<String, Object> body) {
         long id = (Long) body.get("id");
         String name = (String) body.get("name");
-        return ingredientsDB.updateIngredients(id , name);
+        return ingredientsDB.updateIngredients(id, name);
     }
 
     @CrossOrigin(origins = "*")

@@ -48,13 +48,11 @@ public class RecipesController {
     @CrossOrigin(origins = "*")
     @GetMapping("get/recipes/category/{id}")
     public Map recipesCategory(@PathVariable long id) {
-        Map<String,String> result = new HashMap<>();
-        try{
-            result.put("category" ,recipesDB.getRecipesCategory(id).get(0));
-        }
-
-        catch (Exception e) {
-            result.put("category" , CategoryList.MEATLOVER.toString());
+        Map<String, String> result = new HashMap<>();
+        try {
+            result.put("category", recipesDB.getRecipesCategory(id).get(0));
+        } catch (Exception e) {
+            result.put("category", CategoryList.MEATLOVER.toString());
         }
 
 
@@ -64,16 +62,16 @@ public class RecipesController {
     @CrossOrigin(origins = "*")
     @GetMapping("get/recipes/course/{id}")
     public Map recipesCourse(@PathVariable long id) {
-        Map<String,String> result = new HashMap<>();
-        result.put("category" ,recipesDB.getRecipesCourse(id).get(0));
+        Map<String, String> result = new HashMap<>();
+        result.put("category", recipesDB.getRecipesCourse(id).get(0));
         return result;
     }
 
     @CrossOrigin(origins = "*")
     @GetMapping("get/recipes/ingredients/{id}")
     public Map recipesIngredients(@PathVariable long id) {
-        Map<String,String> result = new HashMap<>();
-        result.put("ingredients" ,recipesDB.getRecipesIngredients(id).get(0));
+        Map<String, String> result = new HashMap<>();
+        result.put("ingredients", recipesDB.getRecipesIngredients(id).get(0));
         return result;
     }
 
@@ -106,7 +104,6 @@ public class RecipesController {
     public List<Recipes> recipesByExactIngredient(@PathVariable String ingredient) {
         return recipesDB.getRecipesByExactIngredientsName(ingredient);
     }
-
 
 
     @CrossOrigin(origins = "*")
@@ -161,12 +158,12 @@ public class RecipesController {
         ingredients = (ArrayList<HashMap<String, String>>) body.get("ingredients");
         List<Ingredients> newIngredientsArray = new ArrayList<>();
 
-        Recipes newRecipe = recipesDB.insertRecipes(name,time,howto).get(0);
+        Recipes newRecipe = recipesDB.insertRecipes(name, time, howto).get(0);
         long newRecipeId = newRecipe.getId();
 
         System.out.println("New Recipe ID = " + newRecipeId);
 
-        for(HashMap<String,String> loopIngredient : ingredients) {
+        for (HashMap<String, String> loopIngredient : ingredients) {
             Ingredients newIngredient = new Ingredients(
                     Long.parseLong(loopIngredient.get("id")),
                     loopIngredient.get("name"),
@@ -175,8 +172,8 @@ public class RecipesController {
             newIngredientsArray.add(newIngredient);
         }
 
-        for(Ingredients newOne : newIngredientsArray) {
-            ingredientsDB.insertIngredientToRecipe(newOne,newRecipeId);
+        for (Ingredients newOne : newIngredientsArray) {
+            ingredientsDB.insertIngredientToRecipe(newOne, newRecipeId);
             System.out.println("Added :" + newOne);
         }
 
@@ -194,7 +191,7 @@ public class RecipesController {
         int time = (Integer) body.get("time");
         String howto = (String) body.get("howto");
 
-        return recipesDB.updateRecipes(id,name, time, howto);
+        return recipesDB.updateRecipes(id, name, time, howto);
     }
 
     @CrossOrigin(origins = "*")

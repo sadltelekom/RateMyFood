@@ -63,6 +63,6 @@ public class Recipes {
 
     @Override
     public boolean equals(Object obj) {
-        return this.id==((Recipes)obj).id;
+        return this.id == ((Recipes) obj).id;
     }
 }
